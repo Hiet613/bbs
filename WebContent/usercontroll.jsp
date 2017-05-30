@@ -22,6 +22,9 @@
 				<c:remove var="errorMessages" scope="session"/>
 			</c:if>
 			<h1>ユーザー管理画面</h1>
+			<form action="signup" method="get"><br />
+			<input type="submit" value="ユーザー新規登録" /> <br />
+			</form>
 			<p>ユーザーのログインID・名称一覧</p>
 			<div class= "userinfomation">
 				<c:forEach items = "${userinfomations}" var="userinfomation">
@@ -52,12 +55,16 @@
 						<input type="submit" value="編集する" /> <br />
 						</div>
 					</form>
+					<%-- ユーザーの削除（ポストメソッド）で送信する  --%>
+					<form action="deleteUser" method="post">
+						<div class = "id">ID：<c:out value="${userinfomation.id }"/></div>
+						<input type="hidden" name= "id" value="${userinfomation.id }" />
+						<input type="submit" value="このユーザーを削除する"/>
+					</form>
 						<c:if test="${userinfomation.isStopped == 0 }" >
 						<form action="isstopped" method="get"><br />
 							<input type="hidden" name="isStopped" value="${userinfomation.isStopped }" />
 							<input type="hidden" name="id" value="${userinfomation.id }" />
-
-
 							<script type="text/javascript">
 							document.write()
 							function disp(){

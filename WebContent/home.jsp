@@ -13,9 +13,11 @@
 </head>
 
 <body>
-	<form action="usercontroll" method="get"><br />
-	<input type="submit" value="ユーザー管理画面へ" /> <br />
-	</form>
+	<c:if test="${ loginUser.division == 1 }">
+		<form action="usercontroll" method="get"><br />
+		<input type="submit" value="ユーザー管理画面へ" /> <br />
+		</form>
+	</c:if>
 ホーム画面
 
 
@@ -23,56 +25,89 @@
 	<c:if test="${ empty loginUser }">
 		<a href="login">ログイン</a>
 		<a href="signup">登録する</a>
+		<br>
 	</c:if>
 <%--ログインしてる時 --%>
 	<c:if test="${ not empty loginUser }">
 		<a href="logout">ログアウト</a>
-<br>
-＿＿</c:if>＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+	<br>
+		<a href="http://localhost:8080/bbs/newmessage.jsp">新規投稿画面へ</a>
+		<div class = "title">名前：<c:out value="${loginUser.name }"/></div>
+		<div class = "title">部署：<c:out value="${loginUser.division }"/></div>
 
-<div class= "messages">
+	＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+	<br>
+	<div class= "messages">
 		<c:forEach items = "${messages}" var="message">
-		<div class = "message" >
-			<span class ="name">投稿者：<c:out value="${message.name}"/></span>
-		</div>
-		<div class = "id"> ID :<c:out value = "${message.id }" /> </div>
-		<div class = "title">件名：<c:out value="${message.title }"/></div>
-		本文
-		<br>
-		<div class = "message"><c:out value="${message.messages }"/></div>
-		投稿日時：<div class = "date"><fmt:formatDate value="${message.insertDate }"/></div>
+			<div class = "message" >
+				<span class ="name">投稿者：<c:out value="${message.name}"/></span>
+			</div>
+			<div class = "id"> ID :<c:out value = "${message.id }" /> </div>
+			<div class = "title">件名：<c:out value="${message.title }"/></div>
+			本文
+			<br>
+			<div class = "message"><c:out value="${message.messages }"/></div>
+			投稿日時：<div class = "date"><fmt:formatDate value="${message.insertDate }"/></div>
+			<c:if test="${ loginUser.division == 2 || message.userId == loginUser.id }">
+			<form action="delete" method="post">
+				<input type="hidden" name="messageId" value="${message.id }" />
+				<input type="submit" value="削除する"/>
+			</form>
+			</c:if>
+			<c:forEach items = "${comments}" var="comments">
+			<c:if test="${comments.messageId == message.id}">
 
-		<form action="comment" method="post">
+~~~~~~~~~~~~~~~~~~~~~~~~~~コメント~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			<div class = "comments" >
+				<span class ="name">本文：<c:out value="${comments.comment}"/></span>
+				<br>
+				<span class ="name">コメント日時：<c:out value="${comments.insertDate}"/></span>
+				<br>
+				<span class ="name">投稿者：<c:out value="${comments.name}"/></span>
+				<span class ="name">コメントID：<c:out value="${comments.commentId}"/></span>
+			</div>
+			<c:if test="${ loginUser.division == 2 || comments.userId == loginUser.id }">
+				<form action="deleteComment" method="post">
+					<input type="hidden" name="commentId" value="${comments.commentId }" />
+					<input type="submit" value="削除する"/>
+				</form>
+			</c:if>
 
-		<input type="submit" value="コメントする"/>
-		<textarea name="comment" cols="50" rows="1" class="tweet-box"></textarea>
-		<input type="hidden" name="id" value="${message.id }" />
-
-		</form>
-		<br>
-＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
-		<br />
-	</c:forEach>
-</div>
-
-
-
-<c:if test="${ not empty errorMessages }">
-	<div class="errorMessages">
-		<ul>
-			<c:forEach items="${errorMessages}" var="message">
-				<li><c:out value="${message}" />
+			</c:if>
 			</c:forEach>
-		</ul>
+			<form action="comment" method="post">
+
+				<input type="submit" value="コメントする"/>
+				<textarea name="comment" cols="50" rows="1" class="tweet-box"></textarea>
+
+				<input type="hidden" name="id" value="${message.id }" />
+
+			</form>
+			<br>
+	＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+			<br />
+		</c:forEach>
 	</div>
-	<c:remove var="errorMessages" scope="session"/>
-</c:if>
+	<br>
+	</c:if>
+
+
+	<c:if test="${ not empty errorMessages }">
+		<div class="errorMessages">
+			<ul>
+				<c:forEach items="${errorMessages}" var="message">
+					<li><c:out value="${message}" />
+				</c:forEach>
+			</ul>
+		</div>
+		<c:remove var="errorMessages" scope="session"/>
+	</c:if>
 
 
 
 
 
-	<a href="http://localhost:8080/bbs/newmessage.jsp">新規投稿画面へ</a>
+
 
 
 	<div class="copyright">Copyright(c)Hitoshi Kawase</div>

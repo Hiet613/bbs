@@ -41,7 +41,7 @@ public class CommentServlet extends HttpServlet {
 			comment.setUserId(user.getId());
 			comment.setMessageId(request.getParameter("id"));
 
-			System.out.println(request.getParameter("comment"));
+
 
 			new CommentService().register(comment);
 
@@ -59,8 +59,8 @@ public class CommentServlet extends HttpServlet {
 		if(StringUtils.isEmpty(comment) == true){
 			messages.add("メッセージを入力してください");
 		}
-		if(1000 < comment.length()) {
-			messages.add("1000文字以下で入力してください");
+		if(500 < comment.length()) {
+			messages.add("500文字以下で入力してください");
 		}
 		if(messages.size() == 0) {
 			return true;

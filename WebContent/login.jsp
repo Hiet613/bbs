@@ -12,10 +12,11 @@
 	<body>
 	<div class="main-contents">
 		<h1>ログイン画面</h1>
-		<c:if test="${ not empty errorMessages }">
+
+		<c:if test="${not empty errorMesseges}">
 			<div class="errorMessages">
 				<ul>
-					<c:forEach items="${errorMessages}" var="message">
+					<c:forEach items="${errorMesseges}" var="message">
 						<li><c:out value="${message}" />
 					</c:forEach>
 				</ul>

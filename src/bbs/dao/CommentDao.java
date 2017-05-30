@@ -18,8 +18,8 @@ public class CommentDao {
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("INSERT INTO comments ( ");
-			sql.append("  messege_id");
-			sql.append(", text");
+			sql.append("  message_id");
+			sql.append(", comment");
 			sql.append(", user_id");
 			sql.append(", created_at");
 			sql.append(", updated_at");
@@ -44,4 +44,25 @@ public class CommentDao {
 		}
 	}
 
+	public void deleteComment(Connection connection, Comment comment){
+
+		PreparedStatement ps = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+			sql.append("DELETE FROM comments ");
+			sql.append(" WHERE ");
+			sql.append(" id = ? ");
+
+			ps = connection.prepareStatement(sql.toString());
+			ps.setInt(1, comment.getId());
+			ps.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
 }
+
+

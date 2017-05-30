@@ -48,4 +48,23 @@ public class MessageDao {
 		}
 	}
 
+	public void deleteMessage(Connection connection, Message message){
+
+		PreparedStatement ps = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+			sql.append("DELETE FROM messages ");
+			sql.append(" WHERE ");
+			sql.append(" id = ? ");
+
+			ps = connection.prepareStatement(sql.toString());
+			ps.setInt(1, message.getId());
+			ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
 }

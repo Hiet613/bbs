@@ -13,7 +13,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
+import bbs.beans.Branch;
+import bbs.beans.Division;
 import bbs.beans.User;
+import bbs.service.BranchService;
+import bbs.service.DivisionService;
 import bbs.service.UserService;
 
 @WebServlet(urlPatterns = { "/signup" })
@@ -24,6 +28,10 @@ public class SignUpServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
+		List<Branch> branches = new BranchService().getBranches();
+		List<Division> divisions = new DivisionService().getDivisions();
+		request.setAttribute("divisions",divisions);
+		request.setAttribute("branches", branches);
 		request.getRequestDispatcher("signup.jsp").forward(request, response);
 	}
 
@@ -34,6 +42,7 @@ public class SignUpServlet extends HttpServlet {
 		List<String> messages = new ArrayList<String>();
 
 		HttpSession session = request.getSession();
+
 		if (isValid(request, messages) == true) {
 
 			User user = new User();

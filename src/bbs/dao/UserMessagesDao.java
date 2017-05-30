@@ -20,7 +20,7 @@ public class UserMessagesDao {
 		PreparedStatement ps = null;
 		try{
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM user_messages ");
+			sql.append("SELECT * FROM users_messages ");
 			sql.append("ORDER BY created_at DESC limit " + num);
 
 			ps = connection.prepareStatement(sql.toString());

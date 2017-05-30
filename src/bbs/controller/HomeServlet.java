@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import bbs.beans.User;
 import bbs.beans.UserMessages;
+import bbs.beans.UsersMessagesComments;
+import bbs.service.CommentService;
 import bbs.service.MessageService;
+
 
 @WebServlet(urlPatterns = { "/index.jsp" })
 public class HomeServlet extends HttpServlet {
@@ -32,8 +35,12 @@ public class HomeServlet extends HttpServlet {
 		List<UserMessages> messages = new MessageService().getMessage();
 
 		request.setAttribute("messages", messages);
-		request.setAttribute("isShowMessageForm", isShowMessageForm);
 
+
+		List<UsersMessagesComments> usersMessagesComments = new CommentService().getUsersMessagesComments();
+		request.setAttribute("comments", usersMessagesComments);
+
+		request.setAttribute("isShowMessageForm", isShowMessageForm);
 		request.getRequestDispatcher("/home.jsp").forward(request,response);
 
 	}

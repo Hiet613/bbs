@@ -207,7 +207,7 @@ public class UserDao {
 	}
 
 //ユーザー停止復活の更新
-	public void isStopped(Connection connection,User user){
+	public void isStopped(Connection connection, User user){
 
 		PreparedStatement ps = null;
 		try{
@@ -226,6 +226,27 @@ public class UserDao {
 			if (count == 0) {
 				throw new NoRowsUpdatedRuntimeException();
 			}
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
+//ユーザー情報の削除
+	public void deleteUser(Connection connection, User user){
+
+		PreparedStatement ps = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+			sql.append("DELETE FROM users ");
+			sql.append(" WHERE ");
+			sql.append(" id = ? ");
+
+			ps = connection.prepareStatement(sql.toString());
+			ps.setInt(1, user.getId());
+			ps.executeUpdate();
+
 		} catch (SQLException e) {
 			throw new SQLRuntimeException(e);
 		} finally {

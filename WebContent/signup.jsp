@@ -30,23 +30,23 @@
 
 				<label for="name">名称</label>
 				<input name="name" id="name"/>（名前はあなたの公開プロフィールに表示されます）<br />
-
 				支店:
-				<select name="branch">
-					<option value="1">本社</option>
-					<option value="2">支店１</option>
-					<option value="3">支店２</option>
-				</select>
+				<div class= "branch">
+					<select name="branch">
+					<c:forEach items = "${branches}" var="branches">
+					<option value="${branches.id}"><c:out value="${branches.name}"/></option>
+					</c:forEach>
+					</select>
+				</div>
+				部署・役職:
+				<div class= "division">
+					<select name="division">
+					<c:forEach items = "${divisions}" var="divisions">
+					<option value="${divisions.id}"><c:out value="${divisions.name}"/></option>
+					</c:forEach>
+					</select>
 				<br />
-
-				部署・役職
-				<select name="division">
-					<option value="1">人事</option>
-					<option value="2">情報管理</option>
-					<option value="3">店長</option>
-					<option value="4">社員</option>
-				</select>
-				<br />
+				</div>
 				<input type="submit" value="登録" /> <br />
 				<a href="./">戻る</a>
 			</form>

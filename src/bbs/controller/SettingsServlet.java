@@ -31,7 +31,7 @@ public class SettingsServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		String branch = request.getParameter("branch");
 		String division = request.getParameter("division");
-		System.out.println(division);
+
 		int Iid = Integer.parseInt(id);
 
 		userSettings.setId(Iid);
@@ -119,6 +119,7 @@ public class SettingsServlet extends HttpServlet {
 	}
 
 	//リクエスト領域から入力情報を取得するメソッド
+
 	private User getEditUser(HttpServletRequest request) throws IOException, ServletException
 	{
 

@@ -81,6 +81,57 @@ public class MessageService {
 	}
 
 
+//日付絞込み取得メソッド
 
+
+	public List<UserMessages> getNarrowedMessages(String start, String end){
+
+		Connection connection = null;
+		try{
+			connection =getConnection();
+
+			UserMessagesDao messageDao = new UserMessagesDao();
+
+			List<UserMessages> ret = messageDao.getNarrowedMessages(connection, LIMIT_NUM, start, end);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e){
+			rollback(connection);
+			throw e;
+		} catch (Error e){
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+
+	}
+	//日付カテゴリ絞込み取得メソッド
+
+		public List<UserMessages> getNarrowedMessagesCategory(String start, String end,String category){
+
+			Connection connection = null;
+			try{
+				connection =getConnection();
+
+				UserMessagesDao messageDao = new UserMessagesDao();
+
+				List<UserMessages> ret = messageDao.getNarrowedMessagesCategory(connection, LIMIT_NUM, start, end, category);
+
+				commit(connection);
+
+				return ret;
+			} catch (RuntimeException e){
+				rollback(connection);
+				throw e;
+			} catch (Error e){
+				rollback(connection);
+				throw e;
+			} finally {
+				close(connection);
+			}
+
+		}
 }
-

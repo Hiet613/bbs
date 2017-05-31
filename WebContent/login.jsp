@@ -32,7 +32,7 @@
 			<input name="password" type="password" id="password"/> <br />
 
 			<input type="submit" value="ログイン" /> <br />
-			<a href="./">戻る</a>
+
 		</form>
 	</div>
 	<div class="copyright">Copyright(c)</div>

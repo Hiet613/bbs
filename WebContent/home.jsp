@@ -18,7 +18,7 @@
 		<input type="submit" value="ユーザー管理画面へ" /> <br />
 		</form>
 	</c:if>
-ホーム画面
+ホーム画面 <br>
 
 
 <%--ログインしてない時 --%>
@@ -31,10 +31,31 @@
 	<c:if test="${ not empty loginUser }">
 		<a href="logout">ログアウト</a>
 	<br>
-		<a href="http://localhost:8080/bbs/newmessage.jsp">新規投稿画面へ</a>
+		<a href="newMessage">新規投稿画面へ</a>
 		<div class = "title">名前：<c:out value="${loginUser.name }"/></div>
 		<div class = "title">部署：<c:out value="${loginUser.division }"/></div>
+		<form action="./" method="get">
+		<input type="date" name="startDate" >～<input type="date" name="endDate" >
+		<br>
+		カテゴリ:
+		<div class= "category">
+			<select name="category">
+			<option value=""><c:out value=""/></option>
+			<c:forEach items = "${messages}" var="message">
+			<option value="${message.category}"><c:out value="${message.category}"/></option>
+			</c:forEach>
+			</select>
+		<br />
+		</div>
+		<input type="submit" value="絞り込む"/>
+		</form>
 
+
+		<form action="./" method="get">
+		<input type="submit" value="リセット"/>
+		</form>
+
+	<br>
 	＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 	<br>
 	<div class= "messages">
@@ -48,6 +69,7 @@
 			<br>
 			<div class = "message"><c:out value="${message.messages }"/></div>
 			投稿日時：<div class = "date"><fmt:formatDate value="${message.insertDate }"/></div>
+				カテゴリ：<div class = "category"><c:out value="${message.category }"/></div>
 			<c:if test="${ loginUser.division == 2 || message.userId == loginUser.id }">
 			<form action="delete" method="post">
 				<input type="hidden" name="messageId" value="${message.id }" />

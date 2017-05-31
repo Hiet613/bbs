@@ -60,7 +60,7 @@ public class MessageDao {
 			ps = connection.prepareStatement(sql.toString());
 			ps.setInt(1, message.getId());
 			ps.executeUpdate();
-			
+
 		} catch (SQLException e) {
 			throw new SQLRuntimeException(e);
 		} finally {

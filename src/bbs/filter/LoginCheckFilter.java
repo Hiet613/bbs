@@ -1,6 +1,8 @@
 package bbs.filter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -9,6 +11,11 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import bbs.beans.User;
 
 @WebFilter("/*")
 public class LoginCheckFilter implements Filter {
@@ -22,10 +29,37 @@ public class LoginCheckFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-
+		HttpServletRequest req = (HttpServletRequest)request;
+		HttpServletResponse res =(HttpServletResponse)response;
+		List<String> messages = new ArrayList<String>();
+		User user = new User();
 		if (request.getCharacterEncoding() == null) {
 			request.setCharacterEncoding(encoding);
 		}
+
+		if(!req.getServletPath().equals("/login") ){
+			HttpSession session = req.getSession();
+			user = (User) session.getAttribute("loginUser");
+			if(user == null){
+				messages.add("ログインしていません");
+				session.setAttribute("errorMesseges", messages);
+				res.sendRedirect("login");
+				return;
+			}
+		}
+
+		HttpSession session = req.getSession();
+		user = (User)session.getAttribute("loginUser");
+
+		if(user.getIsStopped() == 1 ){
+
+			messages.add("このユーザーの権限は停止されています");
+			session.setAttribute("errorMesseges", messages);
+			res.sendRedirect("login");
+			return;
+
+		}
+
 
 		chain.doFilter(request, response); // サーブレットを実行
 

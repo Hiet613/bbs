@@ -23,26 +23,73 @@ public class HomeServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+		String category = request.getParameter("category");
 
-		User user = (User) request.getSession().getAttribute("loginUser");
-		boolean isShowMessageForm;
-		if(user != null){
-			isShowMessageForm =true;
-		} else {
-			isShowMessageForm = false;
+		System.out.println(startDate);
+		System.out.println(endDate);
+		System.out.println(category);
+
+		if(startDate == null && endDate == null && category == null){
+			User user = (User) request.getSession().getAttribute("loginUser");
+			boolean isShowMessageForm;
+			if(user != null){
+				isShowMessageForm =true;
+			} else {
+				isShowMessageForm = false;
+			}
+
+			List<UserMessages> messages = new MessageService().getMessage();
+			request.setAttribute("messages", messages);
+			List<UsersMessagesComments> usersMessagesComments = new CommentService().getUsersMessagesComments();
+			request.setAttribute("comments", usersMessagesComments);
+
+			request.setAttribute("isShowMessageForm", isShowMessageForm);
+			request.getRequestDispatcher("/home.jsp").forward(request,response);
+		}
+		if(startDate.isEmpty()){
+			startDate = "2010-01-01";
 		}
 
-		List<UserMessages> messages = new MessageService().getMessage();
+		if(endDate.isEmpty()){
+			endDate = "2100-05-26" + " 23:59:59";
+		} else {
+			endDate = endDate + " 23:59:59";
+		}
 
-		request.setAttribute("messages", messages);
+		if(category.isEmpty()){
+			User user = (User) request.getSession().getAttribute("loginUser");
+			boolean isShowMessageForm;
+			if(user != null){
+				isShowMessageForm =true;
+			} else {
+				isShowMessageForm = false;
+			}
+			List<UserMessages> narrowedMessages = new MessageService().getNarrowedMessages(startDate,endDate);
+			request.setAttribute("messages", narrowedMessages);
+			List<UsersMessagesComments> usersMessagesComments = new CommentService().getUsersMessagesComments();
+			request.setAttribute("comments", usersMessagesComments);
 
+			request.setAttribute("isShowMessageForm", isShowMessageForm);
+			request.getRequestDispatcher("/home.jsp").forward(request,response);
 
-		List<UsersMessagesComments> usersMessagesComments = new CommentService().getUsersMessagesComments();
-		request.setAttribute("comments", usersMessagesComments);
+		} else {
+			User user = (User) request.getSession().getAttribute("loginUser");
+			boolean isShowMessageForm;
+			if(user != null){
+				isShowMessageForm =true;
+			} else {
+				isShowMessageForm = false;
+			}
+			List<UserMessages> narrowedMessagesCategory = new MessageService().getNarrowedMessagesCategory(startDate,endDate,category);
+			request.setAttribute("messages", narrowedMessagesCategory);
+			List<UsersMessagesComments> usersMessagesComments = new CommentService().getUsersMessagesComments();
+			request.setAttribute("comments", usersMessagesComments);
 
-		request.setAttribute("isShowMessageForm", isShowMessageForm);
-		request.getRequestDispatcher("/home.jsp").forward(request,response);
-
+			request.setAttribute("isShowMessageForm", isShowMessageForm);
+			request.getRequestDispatcher("/home.jsp").forward(request,response);
+		}
 	}
 
 }

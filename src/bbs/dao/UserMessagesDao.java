@@ -66,4 +66,62 @@ public class UserMessagesDao {
 			close(rs);
 		}
 	}
+
+	public List<UserMessages> getNarrowedMessages(Connection connection, int num, String start, String end){
+
+		PreparedStatement ps = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM users_messages ");
+			sql.append(" WHERE ? <= created_at AND ");
+			sql.append(" created_at <= ? ");
+			sql.append(" ORDER BY created_at DESC limit " + num);
+
+			ps = connection.prepareStatement(sql.toString());
+
+			ps.setString(1, start);
+			ps.setString(2, end);
+
+			ps.executeQuery();
+
+
+			ResultSet rs = ps.executeQuery();
+			List<UserMessages> ret = toUserMessagesList(rs);
+			return ret;
+		} catch (SQLException e) {
+			throw new SQLRuntimeException (e) ;
+		} finally {
+			close(ps);
+		}
+	}
+
+	public List<UserMessages> getNarrowedMessagesCategory(Connection connection, int num, String start, String end, String category){
+
+		PreparedStatement ps = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM users_messages ");
+			sql.append(" WHERE ? <= created_at AND ");
+			sql.append(" created_at <= ? ");
+			sql.append(" AND category = ? ");
+			sql.append(" ORDER BY created_at DESC limit " + num);
+
+			ps = connection.prepareStatement(sql.toString());
+
+			ps.setString(1, start);
+			ps.setString(2, end);
+			ps.setString(3, category);
+
+			ps.executeQuery();
+
+
+			ResultSet rs = ps.executeQuery();
+			List<UserMessages> ret = toUserMessagesList(rs);
+			return ret;
+		} catch (SQLException e) {
+			throw new SQLRuntimeException (e) ;
+		} finally {
+			close(ps);
+		}
+	}
 }

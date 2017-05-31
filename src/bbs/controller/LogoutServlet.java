@@ -18,7 +18,8 @@ public class LogoutServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		//セッションの無効化
 		session.invalidate();
-		response.sendRedirect("http://localhost:8080/bbs/login.jsp");
+		response.sendRedirect("login");
+
 	}
 
 }

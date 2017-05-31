@@ -27,6 +27,10 @@ public class NewMessageServlet extends HttpServlet {
 
 
 	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+		request.getRequestDispatcher("newmessage.jsp").forward(request, response);
+
+	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 
 		HttpSession session = request.getSession();

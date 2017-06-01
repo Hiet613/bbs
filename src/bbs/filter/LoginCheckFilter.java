@@ -48,17 +48,7 @@ public class LoginCheckFilter implements Filter {
 			}
 		}
 
-		HttpSession session = req.getSession();
-		user = (User)session.getAttribute("loginUser");
 
-		if(user.getIsStopped() == 1 ){
-
-			messages.add("このユーザーの権限は停止されています");
-			session.setAttribute("errorMesseges", messages);
-			res.sendRedirect("login");
-			return;
-
-		}
 
 
 		chain.doFilter(request, response); // サーブレットを実行

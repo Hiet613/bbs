@@ -18,6 +18,7 @@ import bbs.service.LoginService;
 public class LoginServlet extends HttpServlet{
 	private static final long serialVersionUID =1L;
 
+
 	@Override
 	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws IOException,ServletException{
 		request.getRequestDispatcher("login.jsp").forward(request, response);

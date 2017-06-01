@@ -24,6 +24,7 @@
 			</c:if>
 
 			<form action="settings" method="post"><br />
+
 				<label for="name">名称</label>
 				<input name="name" value="${userSettings.name}" id="name"/><br />
 
@@ -37,14 +38,27 @@
 				<label for="password">パスワード</label>
 				<input name="password" type="password" id="password"/> <br />
 
-				<label for="branch">支店</label>
-				<input name="branch" value ="${userSettings.branch}" id="branch"/> <br />
+				<label for="password2">パスワード確認用</label>
+				<input name="password2" type="password" id="password2"/> <br />
 
-				<label for="divison">部署役職</label>
-				<input name="division" value ="${userSettings.division}" id ="division"/> <br />
+					支店:
+				<div class= "branch">
+					<select name="branch">
+					<c:forEach items = "${branches}" var="branches">
+					<option value="${branches.id}"><c:out value="${branches.name}"/></option>
+					</c:forEach>
+					</select>
+				</div>
 
-
-
+				部署・役職:
+				<div class= "division">
+					<select name="division">
+					<c:forEach items = "${divisions}" var="divisions">
+					<option value="${divisions.id}"><c:out value="${divisions.name}"/></option>
+					</c:forEach>
+					</select>
+				<br />
+				</div>
 
 
 				<input type="submit" value="登録" /> <br />

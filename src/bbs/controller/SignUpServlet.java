@@ -40,7 +40,6 @@ public class SignUpServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		List<String> messages = new ArrayList<String>();
-
 		HttpSession session = request.getSession();
 
 		if (isValid(request, messages) == true) {
@@ -63,15 +62,29 @@ public class SignUpServlet extends HttpServlet {
 	}
 
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
+
 		String loginId = request.getParameter("loginId");
 		String password = request.getParameter("password");
+		String password2 = request.getParameter("password2");
+		String name = request.getParameter("name");
+
+
 
 		if (StringUtils.isEmpty(loginId) == true) {
-			messages.add("アカウント名を入力してください");
+			messages.add("ログインIDを入力してください");
 		}
+
 		if (StringUtils.isEmpty(password) == true) {
 			messages.add("パスワードを入力してください");
 		}
+		if(!password.equals(password2)){
+			messages.add("入力したパスワードが一致していません");
+		}
+		if (StringUtils.isEmpty(name) == true) {
+			messages.add("名称を入力してください");
+		}
+
+
 		// TODO アカウントが既に利用されていないか、メールアドレスが既に登録されていないかなどの確認も必要
 		if (messages.size() == 0) {
 			return true;

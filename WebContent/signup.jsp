@@ -28,6 +28,9 @@
 				<label for="password">パスワード</label>
 				<input name="password" type="password" id="password"/> <br />
 
+				<label for="password2">パスワード(確認用)</label>
+				<input name="password2" type="password" id="password2"/> <br />
+
 				<label for="name">名称</label>
 				<input name="name" id="name"/>（名前はあなたの公開プロフィールに表示されます）<br />
 				支店:

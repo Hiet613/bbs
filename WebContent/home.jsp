@@ -56,38 +56,37 @@
 		</form>
 
 	<br>
-	＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+	＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿__＿＿＿＿＿＿＿＿＿＿__＿
 	<br>
 	<div class= "messages">
 		<c:forEach items = "${messages}" var="message">
-			<div class = "message" >
-				<span class ="name">投稿者：<c:out value="${message.name}"/></span>
-			</div>
+			<div class ="name">投稿者：<c:out value="${message.name}"/></div>
+			<div class = "category">カテゴリ：<c:out value="${message.category }"/></div>
 			<div class = "id"> ID :<c:out value = "${message.id }" /> </div>
 			<div class = "title">件名：<c:out value="${message.title }"/></div>
 			本文
 			<br>
 			<div class = "message"><c:out value="${message.messages }"/></div>
 			投稿日時：<div class = "date"><fmt:formatDate value="${message.insertDate }"/></div>
-				カテゴリ：<div class = "category"><c:out value="${message.category }"/></div>
+
 			<c:if test="${ loginUser.division == 2 || message.userId == loginUser.id }">
-			<form action="delete" method="post">
-				<input type="hidden" name="messageId" value="${message.id }" />
-				<input type="submit" value="削除する"/>
-			</form>
+				<form action="delete" method="post">
+					<input type="hidden" name="messageId" value="${message.id }" />
+					<input type="submit" value="削除する"/>
+				</form>
 			</c:if>
 			<c:forEach items = "${comments}" var="comments">
 			<c:if test="${comments.messageId == message.id}">
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~コメント~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-			<div class = "comments" >
-				<span class ="name">本文：<c:out value="${comments.comment}"/></span>
-				<br>
-				<span class ="name">コメント日時：<c:out value="${comments.insertDate}"/></span>
-				<br>
-				<span class ="name">投稿者：<c:out value="${comments.name}"/></span>
-				<span class ="name">コメントID：<c:out value="${comments.commentId}"/></span>
-			</div>
+				<div class = "comments" >
+					<span class ="name">本文：<c:out value="${comments.comment}"/></span>
+					<br>
+					<span class ="name">コメント日時：<c:out value="${comments.insertDate}"/></span>
+					<br>
+					<span class ="name">投稿者：<c:out value="${comments.name}"/></span>
+					<span class ="name">コメントID：<c:out value="${comments.commentId}"/></span>
+				</div>
 			<c:if test="${ loginUser.division == 2 || comments.userId == loginUser.id }">
 				<form action="deleteComment" method="post">
 					<input type="hidden" name="commentId" value="${comments.commentId }" />
@@ -106,7 +105,7 @@
 
 			</form>
 			<br>
-	＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+	＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 			<br />
 		</c:forEach>
 	</div>

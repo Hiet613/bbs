@@ -1,6 +1,7 @@
 package bbs.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -12,8 +13,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
+import bbs.beans.Branch;
+import bbs.beans.Division;
 import bbs.beans.User;
-import bbs.service.UserControllService;
+import bbs.service.BranchService;
+import bbs.service.DivisionService;
 import bbs.service.UserService;
 
 @WebServlet(urlPatterns = { "/settings" })
@@ -24,7 +28,13 @@ public class SettingsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		List<Branch> branches = new BranchService().getBranches();
+		List<Division> divisions = new DivisionService().getDivisions();
+		request.setAttribute("divisions",divisions);
+		request.setAttribute("branches", branches);
+
 		User userSettings = new User();
+
 		String id = request.getParameter("id");
 		String loginId = request.getParameter("loginId");
 		String password = request.getParameter("password");
@@ -43,7 +53,7 @@ public class SettingsServlet extends HttpServlet {
 
 
 		if (request.getAttribute("userSettings") == null){
-			List <User> usersettings = new UserControllService().getUserInfomarion();
+
 			request.setAttribute("userSettings", userSettings);
 			}
 
@@ -53,95 +63,40 @@ public class SettingsServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		List<String> messages = new ArrayList<String>();
+		HttpSession session = request.getSession();
 		User changedUserInfomation = new User();
+
 		String id = request.getParameter("id");
-		String loginId = request.getParameter("loginId");
-		String password = request.getParameter("password");
-		String name = request.getParameter("name");
-		String branch = request.getParameter("branch");
-		String division = request.getParameter("division");
-
 		int Iid = Integer.parseInt(id);
-
 		changedUserInfomation.setId(Iid);
-		changedUserInfomation.setLoginId(loginId);
-		changedUserInfomation.setPassword(password);
-		changedUserInfomation.setName(name);
-		changedUserInfomation.setBranch(branch);
-		changedUserInfomation.setDivision(division);
+		changedUserInfomation.setLoginId(request.getParameter("loginId"));
+		changedUserInfomation.setPassword(request.getParameter("password"));
+		changedUserInfomation.setName(request.getParameter("name"));
+		changedUserInfomation.setBranch(request.getParameter("branch"));
+		changedUserInfomation.setDivision(request.getParameter("division"));
+		if (isValid(request, messages) == true) {
 
 
 		bbs.service.UserService Settings = new UserService();
 		Settings.upDate(changedUserInfomation);
 
-		if(changedUserInfomation != null){
-
-
-			response.sendRedirect("usercontroll");
-
-		}
-
-
-
-		/*エラーメッセージリストの宣言
-		List<String> messages = new ArrayList<String>();
-		//このリクエストに関連づけられている現在のセッションを返す。
-		HttpSession session = request.getSession();
-
-		User editUser = getEditUser(request);
-
-		session.setAttribute("editUser", editUser);
-
-
-		if (isValid(request, messages) == true ) {
-
-			try{
-				new UserService().upDate(editUser);
-
-			} catch (NoRowsUpdatedRuntimeException e) {
-				session.removeAttribute("editUser");
-				//エラーメッセージをmssagesに加える
-				messages.add("他の人によって更新されています。再審のデータを表示しました。データを書くにしてください。");
-				session.setAttribute("errorMessages", messages);
-				response.sendRedirect("settings");
-			}
-
-
-
-
-
-
 		} else {
-			//エラーメッセージ(messages)をerrorMessagesセッション領域に入れる
 			session.setAttribute("errorMessages", messages);
-			response.sendRedirect("settings");
-		} */
+			request.setAttribute("userSettings", changedUserInfomation);
+			request.getRequestDispatcher("settings.jsp").forward(request,response);
+		}
+		if(changedUserInfomation != null){
+			response.sendRedirect("usercontroll");
+		}
 	}
-
-	//リクエスト領域から入力情報を取得するメソッド
-
-	private User getEditUser(HttpServletRequest request) throws IOException, ServletException
-	{
-
-		HttpSession session = request.getSession();
-		User editUser = (User)session.getAttribute("editUser");
-
-		editUser.setLoginId(request.getParameter("loginId"));
-		editUser.setPassword(request.getParameter("password"));
-		editUser.setName(request.getParameter("name"));
-		editUser.setBranch(request.getParameter("branch"));
-		editUser.setDivision(request.getParameter("division"));
-		editUser.setDivision(request.getParameter("id"));
-
-		return editUser;
-
-	}
-
 	//エラーチェックメソッド
 	private boolean isValid(HttpServletRequest request, List<String> messages){
 
 		String loginId = request.getParameter("loginId");
 		String name = request.getParameter("name");
+		String password = request.getParameter("password");
+		String password2 = request.getParameter("password2");
 
 		if(StringUtils.isEmpty(loginId) == true){
 			messages.add("ログインIDを入力してください");
@@ -149,9 +104,11 @@ public class SettingsServlet extends HttpServlet {
 		if(StringUtils.isEmpty(name) == true){
 			messages.add("名称を入力してください");
 		}
+		if(!password.equals(password2)){
+			messages.add("入力したパスワードが一致していません");
+		}
 		/*TODOアカウントがすでに利用されていないか、ログインIDが
 		 * すでに登録されていないかどうかなどの確認も必要*/
-
 		if (messages.size()==0){
 			return true;
 		} else {

@@ -35,7 +35,7 @@
 				<textarea name="message" cols="100" rows="10" class="tweet-box"><c:out value="${messages.message}"/></textarea>
 				<br />
 				カテゴリ（10文字まで）
-				<input type="text" size="10" name="category"><c:out value="${messages.category}"/><br>
+				<input type="text" size="25" name="category"><c:out value="${messages.category}"/><br>
 
 				<br />
 				<input type="submit" value="投稿する"/>

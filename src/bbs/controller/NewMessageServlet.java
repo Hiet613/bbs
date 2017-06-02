@@ -33,6 +33,7 @@ public class NewMessageServlet extends HttpServlet {
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 
+
 		HttpSession session = request.getSession();
 		List<String> messages = new ArrayList<String>();
 		Message message = new Message();
@@ -50,6 +51,7 @@ public class NewMessageServlet extends HttpServlet {
 			session.setAttribute("errorMessages", messages);
 			request.setAttribute("messages", message);
 			request.getRequestDispatcher("newmessage.jsp").forward(request,response);
+			return;
 
 		}
 	}

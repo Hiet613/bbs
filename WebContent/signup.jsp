@@ -23,7 +23,7 @@
 			</c:if>
 			<form action="signup" method="post"><br />
 				<label for="loginId">ログインID</label>
-				<input name="loginId" id="loginId"/>（あなたの公開プロフィール: http://localhost:8080/bbs/?account=アカウント名）<br />
+				<input name="loginId" value="${userSettings.loginId}" id="loginId"/>（あなたの公開プロフィール: http://localhost:8080/bbs/?account=アカウント名）<br />
 
 				<label for="password">パスワード</label>
 				<input name="password" type="password" id="password"/> <br />
@@ -32,12 +32,16 @@
 				<input name="password2" type="password" id="password2"/> <br />
 
 				<label for="name">名称</label>
-				<input name="name" id="name"/>（名前はあなたの公開プロフィールに表示されます）<br />
+				<input name="name"  value="${userSettings.name}" id="name"/>（名前はあなたの公開プロフィールに表示されます）<br />
 				支店:
 				<div class= "branch">
 					<select name="branch">
 					<c:forEach items = "${branches}" var="branches">
-					<option value="${branches.id}"><c:out value="${branches.name}"/></option>
+
+					<option value="${branches.id}" <c:if test="${userSettings.branch == branches.id}">selected
+					</c:if>
+					><c:out value="${branches.name}"/></option>
+
 					</c:forEach>
 					</select>
 				</div>
@@ -45,7 +49,9 @@
 				<div class= "division">
 					<select name="division">
 					<c:forEach items = "${divisions}" var="divisions">
-					<option value="${divisions.id}"><c:out value="${divisions.name}"/></option>
+					<option value="${divisions.id}"<c:if test="${userSettings.division == divisions.id}">selected
+					</c:if>
+					><c:out value="${divisions.name}"/></option>
 					</c:forEach>
 					</select>
 				<br />

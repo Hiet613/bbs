@@ -25,15 +25,18 @@
 
 			<form action="settings" method="post"><br />
 
+				<label for="account">ログインID</label>
+				<input name="loginId" value="${userSettings.loginId}" /> <br />
+
+				<input type="hidden" name="loginId2" value="${userSettings.loginId}" />
 				<label for="name">名称</label>
 				<input name="name" value="${userSettings.name}" id="name"/><br />
 
 				<input type="hidden" name="id" value="${userSettings.id }" />
 
-				<label for="account">ログインID</label>
-
-				<div class = "id">ID：<c:out value="${userSettings.id }"/></div>
-				<input name="loginId" value="${userSettings.loginId}" /> <br />
+				<div class ="notChangedPassword">パスワードが入力されない場合は、それ以外の情報が更新されます。<c:out value="${userSettings.password }"/>
+				<input type="hidden" name="notChangedPassword" value="${userSettings.password }" />
+				</div>
 
 				<label for="password">パスワード</label>
 				<input name="password" type="password" id="password"/> <br />
@@ -45,7 +48,9 @@
 				<div class= "branch">
 					<select name="branch">
 					<c:forEach items = "${branches}" var="branches">
-					<option value="${branches.id}"><c:out value="${branches.name}"/></option>
+					<option value="${branches.id}" <c:if test="${userSettings.branch == branches.id}">selected
+					</c:if>
+					><c:out value="${branches.name}"/></option>
 					</c:forEach>
 					</select>
 				</div>
@@ -54,7 +59,9 @@
 				<div class= "division">
 					<select name="division">
 					<c:forEach items = "${divisions}" var="divisions">
-					<option value="${divisions.id}"><c:out value="${divisions.name}"/></option>
+					<option value="${divisions.id}" <c:if test="${userSettings.division == divisions.id}">selected
+					</c:if>
+					><c:out value="${divisions.name}"/></option>
 					</c:forEach>
 					</select>
 				<br />
@@ -62,7 +69,7 @@
 
 
 				<input type="submit" value="登録" /> <br />
-				<a href="./">戻る</a>
+				<a href="./">ホームへ</a>
 			</form>
 			<div class="copyright">Copyright(c)Satoshi Kimura</div>
 		</div>

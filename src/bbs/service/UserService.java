@@ -10,7 +10,7 @@ import bbs.dao.UserDao;
 import bbs.utils.CipherUtil;
 
 public class UserService {
-
+//ユーザー登録メソッド
 	public void register(User user) {
 
 		Connection connection = null;
@@ -61,12 +61,16 @@ public class UserService {
 			close(connection);
 		}
 	}
-
+//ユーザー情報のアップデートメソッド
 	public void upDate(User user){
 
 		Connection connection = null;
 		try{
 			connection = getConnection();
+
+			String encPassword = CipherUtil.encrypt(user.getPassword());
+			user.setPassword(encPassword);
+
 			UserDao userDao = new UserDao();
 			userDao.upDate(connection, user);
 
@@ -82,6 +86,26 @@ public class UserService {
 		}
 	}
 
+	public void upDate2(User user){
+
+		Connection connection = null;
+		try{
+			connection = getConnection();
+
+			UserDao userDao = new UserDao();
+			userDao.upDate(connection, user);
+
+			commit(connection);
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
 
 
 	public void  isStopped(User user){
@@ -124,7 +148,28 @@ public class UserService {
 			close(connection);
 		}
 	}
+	public User checkLoginId(String loginId){
 
+		Connection connection = null;
+		try{
+			connection = getConnection();
+
+			UserDao userDao = new UserDao();
+			User user = userDao.checkLoginId(connection, loginId);
+
+			commit(connection);
+			return user;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+
+		} catch (Error e) {
+			throw e;
+
+		} finally {
+			close(connection);
+		}
+	}
 
 
 }

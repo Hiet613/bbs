@@ -1,6 +1,7 @@
 package bbs.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -8,8 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import bbs.beans.User;
 import bbs.beans.UserMessages;
 import bbs.beans.UsersMessagesComments;
 import bbs.service.CommentService;
@@ -23,31 +24,37 @@ public class HomeServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+
+		HttpSession session = request.getSession();
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
 		String category = request.getParameter("category");
+		List<String> errorMessages = new ArrayList<String>();
 
-		System.out.println(startDate);
-		System.out.println(endDate);
-		System.out.println(category);
-
+		//初回の処理
 		if(startDate == null && endDate == null && category == null){
-			User user = (User) request.getSession().getAttribute("loginUser");
-			boolean isShowMessageForm;
-			if(user != null){
-				isShowMessageForm =true;
-			} else {
-				isShowMessageForm = false;
-			}
-
 			List<UserMessages> messages = new MessageService().getMessage();
 			request.setAttribute("messages", messages);
 			List<UsersMessagesComments> usersMessagesComments = new CommentService().getUsersMessagesComments();
 			request.setAttribute("comments", usersMessagesComments);
-
-			request.setAttribute("isShowMessageForm", isShowMessageForm);
 			request.getRequestDispatcher("/home.jsp").forward(request,response);
+			return;
 		}
+
+
+		int diff = startDate.compareTo(endDate);
+
+
+		if (diff == 0) {
+	System.out.println("日付1と日付2は同じです");
+	} else if (diff > 0) {
+	System.out.println("日付1は日付2より未来の日付です");
+	errorMessages.add("日付1は日付2より未来の日付です");
+	} else {
+	System.out.println("日付1は日付2より過去の日付です");
+	}
+
+
 		if(startDate.isEmpty()){
 			startDate = "2010-01-01";
 		}
@@ -58,38 +65,29 @@ public class HomeServlet extends HttpServlet {
 			endDate = endDate + " 23:59:59";
 		}
 
+
 		if(category.isEmpty()){
-			User user = (User) request.getSession().getAttribute("loginUser");
-			boolean isShowMessageForm;
-			if(user != null){
-				isShowMessageForm =true;
-			} else {
-				isShowMessageForm = false;
-			}
 			List<UserMessages> narrowedMessages = new MessageService().getNarrowedMessages(startDate,endDate);
 			request.setAttribute("messages", narrowedMessages);
+
+			//カテゴリセレクトボックス保持のため
+			List<UserMessages> messages = new MessageService().getMessage();
+			request.setAttribute("categories", messages);
+
 			List<UsersMessagesComments> usersMessagesComments = new CommentService().getUsersMessagesComments();
 			request.setAttribute("comments", usersMessagesComments);
-
-			request.setAttribute("isShowMessageForm", isShowMessageForm);
-			request.getRequestDispatcher("/home.jsp").forward(request,response);
-
 		} else {
-			User user = (User) request.getSession().getAttribute("loginUser");
-			boolean isShowMessageForm;
-			if(user != null){
-				isShowMessageForm =true;
-			} else {
-				isShowMessageForm = false;
-			}
 			List<UserMessages> narrowedMessagesCategory = new MessageService().getNarrowedMessagesCategory(startDate,endDate,category);
 			request.setAttribute("messages", narrowedMessagesCategory);
+			//カテゴリセレクトボックス保持のため
+			List<UserMessages> messages = new MessageService().getMessage();
+			request.setAttribute("categories", messages);
 			List<UsersMessagesComments> usersMessagesComments = new CommentService().getUsersMessagesComments();
 			request.setAttribute("comments", usersMessagesComments);
-
-			request.setAttribute("isShowMessageForm", isShowMessageForm);
-			request.getRequestDispatcher("/home.jsp").forward(request,response);
 		}
+
+		session.setAttribute("errorMessages", errorMessages);
+		request.getRequestDispatcher("/home.jsp").forward(request,response);
 	}
 
 }

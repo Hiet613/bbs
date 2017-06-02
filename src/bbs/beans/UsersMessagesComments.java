@@ -10,7 +10,9 @@ public class UsersMessagesComments implements Serializable {
 	private int userId;
 	private int messageId;
 	private String name;
-	private String comment;;
+	private String comment;
+	private int branch;
+	private int division;
 	private Date insertDate;
 	private Date updateDate;
 
@@ -45,6 +47,25 @@ public class UsersMessagesComments implements Serializable {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+
+	public int getBranch(){
+		return branch;
+	}
+
+	public void setBranch(String branch){
+		int i = Integer.parseInt(branch);
+		this.branch = i;
+	}
+
+	public int getDivision() {
+		return division;
+	}
+
+	public void setDivision(String division) {
+		int i = Integer.parseInt(division);
+		this.division = i;
+	}
+
 	public Date getInsertDate() {
 		return insertDate;
 	}

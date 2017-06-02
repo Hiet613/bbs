@@ -32,23 +32,25 @@ public class CommentServlet extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		List<String> messages = new ArrayList<String>();
+		Comment comment = new Comment();
+		comment.setComment(request.getParameter("comment"));
+		comment.setMessageId(request.getParameter("id"));
 		if (isValid(request, messages) == true) {
 
 			User user = (User) session.getAttribute("loginUser");
 
-			Comment comment = new Comment();
-			comment.setComment(request.getParameter("comment"));
 			comment.setUserId(user.getId());
-			comment.setMessageId(request.getParameter("id"));
-
-
+			//このIDはメッセージのID
 
 			new CommentService().register(comment);
 
 			response.sendRedirect("./");
+			return;
 		} else {
 			session.setAttribute("errorMessages", messages);
+			session.setAttribute("errorComment", comment);
 			response.sendRedirect("./");
+			return;
 
 		}
 	}
@@ -57,10 +59,10 @@ public class CommentServlet extends HttpServlet {
 		String comment = request.getParameter("comment");
 
 		if(StringUtils.isEmpty(comment) == true){
-			messages.add("メッセージを入力してください");
+			messages.add("コメントを入力してください");
 		}
 		if(500 < comment.length()) {
-			messages.add("500文字以下で入力してください");
+			messages.add("コメントは500文字以下で入力してください");
 		}
 		if(messages.size() == 0) {
 			return true;

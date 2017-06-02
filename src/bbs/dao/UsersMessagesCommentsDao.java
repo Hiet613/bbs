@@ -45,6 +45,8 @@ public class UsersMessagesCommentsDao {
 				int messageId = rs.getInt("message_id");
 				String name= rs.getString("name");
 				String comment = rs.getString("comment");
+				String branch = rs.getString("branch_id");
+				String division = rs.getString("division_id");
 				Timestamp insertDate = rs.getTimestamp("created_at");
 				Timestamp updateDate = rs.getTimestamp("updated_at");
 
@@ -54,6 +56,8 @@ public class UsersMessagesCommentsDao {
 				usersMessagesComments.setMessageId(messageId);
 				usersMessagesComments.setName(name);
 				usersMessagesComments.setComment(comment);
+				usersMessagesComments.setBranch(branch);
+				usersMessagesComments.setDivision(division);
 				usersMessagesComments.setInsertDate(insertDate);
 				usersMessagesComments.setUpdateDate(updateDate);
 

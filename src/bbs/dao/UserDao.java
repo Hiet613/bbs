@@ -253,4 +253,32 @@ public class UserDao {
 			close(ps);
 		}
 	}
+
+//登録、更新時のログインIDチェックメソッド
+	public User checkLoginId(Connection connection, String loginId ){
+		PreparedStatement ps = null;
+		try {
+			String sql = "SELECT * FROM users WHERE login_id = ? ";
+
+			ps = connection.prepareStatement(sql);
+			ps.setString(1, loginId);
+
+
+			ResultSet rs = ps.executeQuery();
+			List<User> userLoginId = toUserList(rs);
+			if (userLoginId.isEmpty() == true ){
+				return null;
+			} else if (2 <= userLoginId.size()){
+				throw new IllegalStateException("2  <= userLoginId.size()");
+
+			} else {
+				return userLoginId.get(0);
+			}
+		} catch(SQLException e) {
+			throw new SQLRuntimeException(e);
+
+		} finally{
+			close(ps);
+		}
+	}
 }

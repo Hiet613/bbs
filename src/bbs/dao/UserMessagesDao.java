@@ -46,8 +46,11 @@ public class UserMessagesDao {
 				String category = rs.getString("category");
 				int userId = rs.getInt("user_id");
 				String name = rs.getString("name");
+				String branch = rs.getString("branch_id");
+				String division = rs.getString("division_id");
 				Timestamp insertDate = rs.getTimestamp("created_at");
 				Timestamp updateDate = rs.getTimestamp("updated_at");
+
 
 				UserMessages message = new UserMessages();
 				message.setId(id);
@@ -55,6 +58,8 @@ public class UserMessagesDao {
 				message.setMessages(messages);
 				message.setCategory(category);
 				message.setUserId(userId);
+				message.setBranch(branch);
+				message.setDivision(division);
 				message.setName(name);
 				message.setInsertDate(insertDate);
 				message.setUpdateDate(updateDate);

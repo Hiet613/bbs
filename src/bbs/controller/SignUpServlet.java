@@ -28,53 +28,91 @@ public class SignUpServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		List<Branch> branches = new BranchService().getBranches();
-		List<Division> divisions = new DivisionService().getDivisions();
-		request.setAttribute("divisions",divisions);
-		request.setAttribute("branches", branches);
-		request.getRequestDispatcher("signup.jsp").forward(request, response);
+		HttpSession session = request.getSession();
+		List<String> messages = new ArrayList<String>();
+
+			 if(isValid2(request, messages) == true) {
+
+			List<Branch> branches = new BranchService().getBranches();
+			List<Division> divisions = new DivisionService().getDivisions();
+			request.setAttribute("divisions",divisions);
+			request.setAttribute("branches", branches);
+			request.getRequestDispatcher("signup.jsp").forward(request, response);
+			return;
+		 } else {
+			session.setAttribute("errorMessages", messages);
+			response.sendRedirect("./");
+			return;
+		}
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-
+		List<Branch> branches = new BranchService().getBranches();
+		List<Division> divisions = new DivisionService().getDivisions();
 		List<String> messages = new ArrayList<String>();
 		HttpSession session = request.getSession();
+		User user = new User();
+		user.setLoginId(request.getParameter("loginId"));
+		user.setPassword(request.getParameter("password"));
+		user.setName(request.getParameter("name"));
+		user.setBranch(request.getParameter("branch"));
+		user.setDivision(request.getParameter("division"));
+
+
 
 		if (isValid(request, messages) == true) {
-
-			User user = new User();
-			user.setLoginId(request.getParameter("loginId"));
-			user.setPassword(request.getParameter("password"));
-			user.setName(request.getParameter("name"));
-			user.setBranch(request.getParameter("branch"));
-			user.setDivision(request.getParameter("division"));
 
 			new UserService().register(user);
 
 			//ユーザ管理画面へ
 			response.sendRedirect("usercontroll");
 		} else {
+			request.setAttribute("divisions",divisions);
+			request.setAttribute("branches", branches);
+			request.setAttribute("userSettings", user);
 			session.setAttribute("errorMessages", messages);
-			response.sendRedirect("signup");
+			request.getRequestDispatcher("signup.jsp").forward(request,response);
+			return;
 		}
 	}
 
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
 
+		UserService checkLoginId = new UserService();
 		String loginId = request.getParameter("loginId");
+		User getloginID =  checkLoginId.checkLoginId(loginId);
+		String seachedLoginId = "捨て文字列";
+		if(getloginID != null){
+			 seachedLoginId = getloginID.getLoginId();
+		}
+
+
+
+
 		String password = request.getParameter("password");
 		String password2 = request.getParameter("password2");
 		String name = request.getParameter("name");
+		String branch = request.getParameter("branch");
+		String division = request.getParameter("division");
 
-
-
-		if (StringUtils.isEmpty(loginId) == true) {
-			messages.add("ログインIDを入力してください");
+		if(seachedLoginId.equals(loginId)){
+			messages.add("このログインIDはすでに使用されています");
 		}
 
-		if (StringUtils.isEmpty(password) == true) {
+		if(branch.equals("1") && division.equals("3")|| division.equals("1") && !branch.equals("1")|| division.equals("2") && !branch.equals("1")){
+			messages.add("この組み合わせの登録は許されていません");
+		}
+
+		if(!loginId.matches("^\\w{6,20}$")){
+			messages.add("ログインIDは半角英数字6文字以上20字以下を入力してください");
+		}
+
+		if(StringUtils.isEmpty(loginId) == true) {
+			messages.add("ログインIDを入力してください");
+		}
+		if(StringUtils.isEmpty(password) == true) {
 			messages.add("パスワードを入力してください");
 		}
 		if(!password.equals(password2)){
@@ -87,6 +125,19 @@ public class SignUpServlet extends HttpServlet {
 
 		// TODO アカウントが既に利用されていないか、メールアドレスが既に登録されていないかなどの確認も必要
 		if (messages.size() == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean isValid2(HttpServletRequest request, List<String> messages){
+		User user = (User) request.getSession().getAttribute("loginUser");
+
+		if(user.getDivision() != 1){
+			messages.add("このページにアクセスする権限はありません。");
+		}
+		if(messages.size() == 0) {
 			return true;
 		} else {
 			return false;

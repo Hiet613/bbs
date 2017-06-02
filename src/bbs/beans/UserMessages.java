@@ -12,6 +12,8 @@ public class UserMessages implements Serializable {
 	private String category;
 	private int userId;
 	private String name;
+	private int branch;
+	private int division;
 	private Date insertDate;
 	private Date updateDate;
 
@@ -62,6 +64,25 @@ public class UserMessages implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+
+	public int getBranch() {
+		return branch;
+	}
+
+	public void setBranch(String branch){
+		int i = Integer.parseInt(branch);
+		this.branch = i;
+	}
+
+	public int getDivision() {
+		return division;
+	}
+
+	public void setDivision(String division) {
+		int i = Integer.parseInt(division);
+		this.division = i;
 	}
 
 	public Date getInsertDate() {

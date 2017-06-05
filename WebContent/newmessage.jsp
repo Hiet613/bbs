@@ -29,15 +29,23 @@
 				<a>新規投稿画面</a>
 				<br />
 				件名（50文字まで）
-				<textarea name="title" cols="50" rows="1" class="tweet-box" ><c:out value="${messages.title}"/></textarea>
+				<input type="text" size="100" value="${messages.title}" name="title" >
 				<br />
 				本文（1000文字まで）
-				<textarea name="message" cols="100" rows="10" class="tweet-box"><c:out value="${messages.message}"/></textarea>
-				<br />
-				カテゴリ（10文字まで）
-				<input type="text" size="25" name="category"><c:out value="${messages.category}"/><br>
 
-				<br />
+				<c:choose>
+					<c:when test="${not empty messages.message}">
+							<textarea name="message" cols="50" rows="1" class="tweet-box"><c:out value="${messages.message}"/></textarea>
+					</c:when>
+					<c:otherwise>
+					<textarea name="message" cols="100" rows="10" class="tweet-box"></textarea>
+					</c:otherwise>
+				</c:choose>
+
+				カテゴリ（10文字まで）
+				<br>
+				<input type="text" size="25" value="${messages.category}" name="category">
+								<br />
 				<input type="submit" value="投稿する"/>
 			</form>
 	</div>

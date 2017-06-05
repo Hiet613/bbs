@@ -25,16 +25,16 @@
 
 			<form action="settings" method="post"><br />
 
-				<label for="account">ログインID</label>
+				<label for="account">ログインID(半角英数字6文字以上20字以下)</label>
 				<input name="loginId" value="${userSettings.loginId}" /> <br />
 
 				<input type="hidden" name="loginId2" value="${userSettings.loginId}" />
-				<label for="name">名称</label>
+				<label for="name">名称(10文字以下)</label>
 				<input name="name" value="${userSettings.name}" id="name"/><br />
 
 				<input type="hidden" name="id" value="${userSettings.id }" />
 
-				<div class ="notChangedPassword">パスワードが入力されない場合は、それ以外の情報が更新されます。<c:out value="${userSettings.password }"/>
+				<div class ="notChangedPassword">パスワードが入力されない場合は、それ以外の情報が更新されます。
 				<input type="hidden" name="notChangedPassword" value="${userSettings.password }" />
 				</div>
 
@@ -43,6 +43,11 @@
 
 				<label for="password2">パスワード確認用</label>
 				<input name="password2" type="password" id="password2"/> <br />
+
+
+
+				<c:if test= "${loginUser.division != userSettings.division}">
+
 
 					支店:
 				<div class= "branch">
@@ -66,12 +71,13 @@
 					</select>
 				<br />
 				</div>
-
+				</c:if>
 
 				<input type="submit" value="登録" /> <br />
 				<a href="./">ホームへ</a>
 			</form>
-			<div class="copyright">Copyright(c)Satoshi Kimura</div>
+				<a href="usercontroll">戻る</a>
+			<div class="copyright">Copyright(c)Hitoshi Kawase</div>
 		</div>
 	</body>
 </html>

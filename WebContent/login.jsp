@@ -26,7 +26,7 @@
 
 		<form action="login" method="post"><br />
 			<label for="loginId">ログインID</label>
-			<input name="loginId" id="loginId"/> <br />
+			<input name="loginId" value = "${loginId}" id="loginId"/>
 
 			<label for="password">パスワード</label>
 			<input name="password" type="password" id="password"/> <br />
@@ -35,7 +35,7 @@
 
 		</form>
 	</div>
-	<div class="copyright">Copyright(c)</div>
+	<div class="copyright">Copyright(c) Hitoshi Kawase</div>
 
 	</body>
 </html>

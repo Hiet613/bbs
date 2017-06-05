@@ -102,20 +102,30 @@ public class SettingsServlet extends HttpServlet {
 
 		List<String> messages = new ArrayList<String>();
 
-		//バリデーションエラーがなくて、入っている値が入力した内容だったら
-		if(isValid(request, messages) == true && changedUserInfomation.getPassword().equals(inputPassword)) {
+		//バリデーションエラー
+		if(isValid(request, messages) == false){
+			session.setAttribute("errorMessages", messages);
+			request.setAttribute("divisions",divisions);
+			request.setAttribute("branches", branches);
+			request.setAttribute("userSettings", changedUserInfomation);
+			request.getRequestDispatcher("settings.jsp").forward(request,response);
+			return;
+		}
+
+		//パスワードが変更されてたら
+		if(changedUserInfomation.getPassword().equals(inputPassword)) {
 
 			//パスワードを暗号化するメソッドを選択してアプデ
 			bbs.service.UserService Settings = new UserService();
 			Settings.upDate(changedUserInfomation);
 
 		//そうじゃなくて、バリデーションエラーがなくて、入っている値が暗号化されたパスワードだったら
-		} else if (isValid(request, messages) == true && changedUserInfomation.getPassword().equals(notChangedPassword)) {
+		} else if (changedUserInfomation.getPassword().equals(notChangedPassword)) {
 			bbs.service.UserService Settings = new UserService();
 			//パスワードを暗号化しないメソッドを選択してアプデ
 			Settings.upDate2(changedUserInfomation);
 		}else{
-			session.setAttribute("errorMessages", messages);
+
 			request.setAttribute("divisions",divisions);
 			request.setAttribute("branches", branches);
 			request.setAttribute("userSettings", changedUserInfomation);
@@ -169,6 +179,13 @@ public class SettingsServlet extends HttpServlet {
 		if(StringUtils.isEmpty(name) == true){
 			messages.add("名称を入力してください");
 		}
+		if(10 < name.length()){
+			messages.add("名称は10文字以下を入力してください");
+		}
+		if(password.length() < 6 || password.length() > 255){
+			messages.add("パスワードは6文字以上255文字以下を入力してください");
+		}
+
 		if(!password.equals(password2)){
 			messages.add("入力したパスワードが一致していません");
 		}

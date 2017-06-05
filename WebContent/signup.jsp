@@ -57,9 +57,10 @@
 				<br />
 				</div>
 				<input type="submit" value="登録" /> <br />
-				<a href="./">戻る</a>
+
 			</form>
-			<div class="copyright">Copyright(c)Satoshi Kimura</div>
+			<a href="usercontroll">戻る</a>
+			<div class="copyright">Copyright(c)Hitoshi Kawase</div>
 		</div>
 	</body>
 </html>

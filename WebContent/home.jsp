@@ -3,12 +3,23 @@
 <%@ page isELIgnored="false"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>ホーム画面</title>
 	<link href="./css/style.css" rel="stylesheet" type="text/css">
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+     <script type="text/javascript">
+
+	$('.delete').submit(function(){
+	    if(!confirm('本当に削除しますか？')){
+	        /* キャンセルの時の処理 */
+	        return false;
+   	 }
+	});
+		</script>
 
 </head>
 
@@ -91,14 +102,36 @@
 			<div class = "id"> メッセージID :<c:out value = "${message.id }" /> </div>
 			<div class = "title">件名：<c:out value="${message.title }"/></div>
 
-			<div class = "message">本文:<c:out value="${message.messages }"/></div>
+			本文<br>
+			<c:forEach var="splitedMessage" items="${fn:split(message.messages,'
+			')}">
+
+			<div class = "splitedMessage"><c:out value="${splitedMessage}"/><br></div>
+			</c:forEach>
+
 			投稿日時：<div class = "date"><fmt:formatDate value="${message.insertDate }"  pattern="yyyy年MM月dd日（E） HH:mm"/></div>
 
 
 			<c:if test="${ loginUser.division == 2 || message.userId == loginUser.id || message.branch == loginUser.branch && loginUser.division == 3}">
 				<form action="delete" method="post">
 					<input type="hidden" name="messageId" value="${message.id }" />
-					<input type="submit" value="削除する"/>
+					<script type="text/javascript">
+							document.write()
+							function disp(){
+								// 「OK」時の処理開始 ＋ 確認ダイアログの表示
+								if(window.confirm('本当にいいんですね？')){
+									location.href = "./";
+								}
+								// 「OK」時の処理終了
+								// 「キャンセル」時の処理開始
+								else{
+									window.alert('キャンセルされました'); // 警告ダイアログを表示
+								}
+								// 「キャンセル」時の処理終了
+							}
+							// -->
+							</script>
+					<input type="submit" value="削除する" onClick="disp()">
 				</form>
 			</c:if>
 
@@ -106,17 +139,13 @@
 				<input type="submit" value="コメントする"/>
 				<c:choose>
 					<c:when test="${not empty errorComment && errorComment.messageId == message.id}">
-
 							<textarea name="comment" cols="50" rows="1" class="tweet-box"><c:out value="${errorComment.comment}"/></textarea>
-
 						<c:remove var="errorComment" scope="session"/>
 					</c:when>
-
 					<c:otherwise>
 					<textarea name="comment" cols="50" rows="1" class="tweet-box"></textarea>
 					</c:otherwise>
 				</c:choose>
-				<div class = "id"> メッセージID :<c:out value = "${message.id }" /> </div>
 				<input type="hidden" name="id" value="${message.id}" />
 			</form>
 
@@ -126,8 +155,11 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~コメント~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 				<div class = "comments" >
-					<span class ="comment">コメント：<c:out value="${comments.comment}"/></span>
-					<br>
+					<c:forEach var="splitedComment" items="${fn:split(comments.comment,'
+			')}">
+
+			<div class = "splitedComment"><c:out value="${splitedComment}"/><br></div>
+			</c:forEach>
 					<span class ="insertDate">コメント日時：<fmt:formatDate value="${comments.insertDate}"  pattern="yyyy年MM月dd日（E） HH:mm"/></span>
 					<br>
 					<span class ="commentUser">投稿者：<c:out value="${comments.name}"/></span>
@@ -138,7 +170,23 @@
 			<c:if test="${ loginUser.division == 2 || comments.userId == loginUser.id || comments.branch == loginUser.branch && loginUser.division == 3 }">
 				<form action="deleteComment" method="post">
 					<input type="hidden" name="commentId" value="${comments.commentId }" />
-					<input type="submit" value="削除する"/>
+					<script type="text/javascript">
+							document.write()
+							function disp(){
+								// 「OK」時の処理開始 ＋ 確認ダイアログの表示
+								if(window.confirm('本当にいいんですね？')){
+									location.href = "./";
+								}
+								// 「OK」時の処理終了
+								// 「キャンセル」時の処理開始
+								else{
+									window.alert('キャンセルされました'); // 警告ダイアログを表示
+								}
+								// 「キャンセル」時の処理終了
+							}
+							// -->
+							</script>
+					<input type="submit" value="削除する" onClick="disp()">
 				</form>
 			</c:if>
 

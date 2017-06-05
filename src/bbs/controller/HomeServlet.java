@@ -41,20 +41,6 @@ public class HomeServlet extends HttpServlet {
 			return;
 		}
 
-
-		int diff = startDate.compareTo(endDate);
-
-
-		if (diff == 0) {
-	System.out.println("日付1と日付2は同じです");
-	} else if (diff > 0) {
-	System.out.println("日付1は日付2より未来の日付です");
-	errorMessages.add("日付1は日付2より未来の日付です");
-	} else {
-	System.out.println("日付1は日付2より過去の日付です");
-	}
-
-
 		if(startDate.isEmpty()){
 			startDate = "2010-01-01";
 		}
@@ -64,6 +50,13 @@ public class HomeServlet extends HttpServlet {
 		} else {
 			endDate = endDate + " 23:59:59";
 		}
+
+		int diff = startDate.compareTo(endDate);
+
+
+		if (diff > 0) {
+			errorMessages.add("選択された日付の始期と終期が不正です");
+			}
 
 
 		if(category.isEmpty()){

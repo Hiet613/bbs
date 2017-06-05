@@ -15,7 +15,7 @@ import bbs.service.MessageService;
 public class DeleteServlet extends HttpServlet{
 	private static final long serialVersionUID =1L;
 
-
+//メッセージの削除
 	@Override
 	protected void doPost(HttpServletRequest request,HttpServletResponse response) throws IOException,ServletException{
 
@@ -23,13 +23,7 @@ public class DeleteServlet extends HttpServlet{
 		String i = request.getParameter("messageId");
 		int Ii = Integer.parseInt(i);
 
-		/*
 
-		if(isStopped.equals("0")){
-			isStopped = "1";
-		} else {
-			isStopped = "0";
-		}*/
 		message.setId(Ii);
 		bbs.service.MessageService messageService = new MessageService();
 		messageService.delete(message);
@@ -40,4 +34,6 @@ public class DeleteServlet extends HttpServlet{
 
 		}
 	}
+
+
 }

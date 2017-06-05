@@ -1,12 +1,15 @@
 package bbs.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import bbs.beans.User;
 import bbs.service.UserService;
@@ -19,21 +22,51 @@ public class DeleteUserServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest request,HttpServletResponse response) throws IOException,ServletException{
 
+		HttpSession session = request.getSession();
+		List<String> messages = new ArrayList<String>();
 
-		User user = new User();
+		if (isValid(request, messages) == true) {
+
+			User user = new User();
+			String i = request.getParameter("id");
+
+			int Ii = Integer.parseInt(i);
+			user.setId(Ii);
+			bbs.service.UserService userService = new UserService();
+			userService.delete(user);
+
+			if(user != null){
+				response.sendRedirect("usercontroll");
+			}
+
+		} else {
+			session.setAttribute("errorMessages", messages);
+			response.sendRedirect("usercontroll");
+			return;
+
+		}
+
+
+	}
+	private boolean isValid(HttpServletRequest request, List<String> messages){
+
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("loginUser");
+
+
 		String i = request.getParameter("id");
-		System.out.println(i);
 		int Ii = Integer.parseInt(i);
 
 
-		user.setId(Ii);
-		bbs.service.UserService userService = new UserService();
-		userService.delete(user);
+		if(Ii == user.getId()){
+			messages.add("自分を削除することはできません");
+		}
 
-		if(user != null){
-
-			response.sendRedirect("usercontroll");
-
+		if(messages.size() == 0) {
+			return true;
+		} else {
+			return false;
 		}
 	}
+
 }

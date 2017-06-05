@@ -10,15 +10,17 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>ホーム画面</title>
 	<link href="./css/style.css" rel="stylesheet" type="text/css">
-	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-     <script type="text/javascript">
-
-	$('.delete').submit(function(){
-	    if(!confirm('本当に削除しますか？')){
-	        /* キャンセルの時の処理 */
-	        return false;
-   	 }
-	});
+	<script type="text/javascript">
+		<!--
+		function dispComment(){
+		if(window.confirm('このコメントを削除します')){
+			location.href = "./";
+			return true;
+		}
+			// 「OK」時の処理終了
+			return false;
+		}
+		 -->
 		</script>
 
 </head>
@@ -115,6 +117,7 @@
 			<c:if test="${ loginUser.division == 2 || message.userId == loginUser.id || message.branch == loginUser.branch && loginUser.division == 3}">
 				<form action="delete" method="post">
 					<input type="hidden" name="messageId" value="${message.id }" />
+					<input type="hidden" name="title" value="${message.title}" />
 					<script type="text/javascript">
 							document.write()
 							function disp(){
@@ -170,23 +173,9 @@
 			<c:if test="${ loginUser.division == 2 || comments.userId == loginUser.id || comments.branch == loginUser.branch && loginUser.division == 3 }">
 				<form action="deleteComment" method="post">
 					<input type="hidden" name="commentId" value="${comments.commentId }" />
-					<script type="text/javascript">
-							document.write()
-							function disp(){
-								// 「OK」時の処理開始 ＋ 確認ダイアログの表示
-								if(window.confirm('本当にいいんですね？')){
-									location.href = "./";
-								}
-								// 「OK」時の処理終了
-								// 「キャンセル」時の処理開始
-								else{
-									window.alert('キャンセルされました'); // 警告ダイアログを表示
-								}
-								// 「キャンセル」時の処理終了
-							}
-							// -->
-							</script>
-					<input type="submit" value="削除する" onClick="disp()">
+					<input type="hidden" name="comment" value="${comments.comment}" />
+
+					<input type="submit" value="削除する" onClick="return dispComment()">
 				</form>
 			</c:if>
 

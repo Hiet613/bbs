@@ -61,7 +61,7 @@ public class UserService {
 			close(connection);
 		}
 	}
-//ユーザー情報のアップデートメソッド
+//ユーザー情報のアップデートメソッド（パスワードは暗号化する）
 	public void upDate(User user){
 
 		Connection connection = null;
@@ -170,6 +170,27 @@ public class UserService {
 			close(connection);
 		}
 	}
+	public User getUserById(String id){
 
+		Connection connection = null;
+		try{
+			connection = getConnection();
+
+			UserDao userDao = new UserDao();
+			User user = userDao.getUserById(connection, id);
+
+			commit(connection);
+			return user;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+
+		} catch (Error e) {
+			throw e;
+
+		} finally {
+			close(connection);
+		}
+	}
 
 }

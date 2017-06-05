@@ -121,7 +121,9 @@ public class SignUpServlet extends HttpServlet {
 		if (StringUtils.isEmpty(name) == true) {
 			messages.add("名称を入力してください");
 		}
-
+		if(10 < name.length()){
+			messages.add("名称は10文字以下を入力してください");
+		}
 
 		// TODO アカウントが既に利用されていないか、メールアドレスが既に登録されていないかなどの確認も必要
 		if (messages.size() == 0) {

@@ -254,7 +254,7 @@ public class UserDao {
 		}
 	}
 
-//登録、更新時のログインIDチェックメソッド
+//登録、更新時のログインIDチェックのため、該当するログインIDをユーザー情報を引っ張ってくる
 	public User checkLoginId(Connection connection, String loginId ){
 		PreparedStatement ps = null;
 		try {
@@ -281,4 +281,34 @@ public class UserDao {
 			close(ps);
 		}
 	}
+
+	public User getUserById(Connection connection, String id ){
+		PreparedStatement ps = null;
+		try {
+			String sql = "SELECT * FROM users WHERE id = ? ";
+
+			ps = connection.prepareStatement(sql);
+			ps.setString(1, id);
+
+
+			ResultSet rs = ps.executeQuery();
+			List<User> getUserById = toUserList(rs);
+			if (getUserById.isEmpty() == true ){
+				return null;
+			} else if (2 <= getUserById.size()){
+				throw new IllegalStateException("2  <= userLoginId.size()");
+
+			} else {
+				return getUserById.get(0);
+			}
+		} catch(SQLException e) {
+			throw new SQLRuntimeException(e);
+
+		} finally{
+			close(ps);
+		}
+	}
+
+
+
 }

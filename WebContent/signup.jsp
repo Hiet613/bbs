@@ -7,6 +7,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>ユーザー新規登録画面</title>
+		<link href="css/style.css" rel="stylesheet" type="text/css">
 
 	</head>
 	<body>
@@ -23,16 +24,15 @@
 			</c:if>
 			<form action="signup" method="post"><br />
 				<label for="loginId">ログインID</label>
-				<input name="loginId" value="${userSettings.loginId}" id="loginId"/>（あなたの公開プロフィール: http://localhost:8080/bbs/?account=アカウント名）<br />
-
+				<input name="loginId" value="${userSettings.loginId}" id="loginId"/>（半角英数6文字以上20字以下）
 				<label for="password">パスワード</label>
-				<input name="password" type="password" id="password"/> <br />
+				<input name="password" type="password" id="password"/>（6文字以上20文字以下） <br />
 
 				<label for="password2">パスワード(確認用)</label>
 				<input name="password2" type="password" id="password2"/> <br />
 
 				<label for="name">名称</label>
-				<input name="name"  value="${userSettings.name}" id="name"/>（名前はあなたの公開プロフィールに表示されます）<br />
+				<input name="name"  value="${userSettings.name}" id="name"/>（10文字以下）<br />
 				支店:
 				<div class= "branch">
 					<select name="branch">

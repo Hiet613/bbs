@@ -1,12 +1,15 @@
 package bbs.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import bbs.beans.Comment;
 import bbs.service.CommentService;
@@ -18,6 +21,9 @@ public class DeleteCommentServlet extends HttpServlet{
 
 	@Override
 	protected void doPost(HttpServletRequest request,HttpServletResponse response) throws IOException,ServletException{
+		HttpSession session = request.getSession();
+		List<String> messages = new ArrayList<String>();
+
 
 		Comment comment = new Comment();
 		String i = request.getParameter("commentId");
@@ -28,7 +34,8 @@ public class DeleteCommentServlet extends HttpServlet{
 		commentService.delete(comment);
 
 		if(comment != null){
-
+			messages.add("コメント「"+ request.getParameter("comment") + "」を削除しました" );
+			session.setAttribute("errorMessages", messages);
 			response.sendRedirect("./");
 
 		}

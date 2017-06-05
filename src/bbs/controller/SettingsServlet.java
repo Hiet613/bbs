@@ -31,29 +31,18 @@ public class SettingsServlet extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		List<String> messages = new ArrayList<String>();
-		User userSettings = new User();
+
+		UserService getUser = new UserService();
+		String id = request.getParameter("id");
+		User getUserById =  getUser.getUserById(id);
 
 		if (isValid2(request, messages) == true) {
 			List<Branch> branches = new BranchService().getBranches();
 			List<Division> divisions = new DivisionService().getDivisions();
 			request.setAttribute("divisions",divisions);
 			request.setAttribute("branches", branches);
+			System.out.println(getUserById.getName());
 
-			String id = request.getParameter("id");
-			String loginId = request.getParameter("loginId");
-			String password = request.getParameter("password");
-			String name = request.getParameter("name");
-			String branch = request.getParameter("branch");
-			String division = request.getParameter("division");
-
-			int Iid = Integer.parseInt(id);
-
-			userSettings.setId(Iid);
-			userSettings.setLoginId(loginId);
-			userSettings.setPassword(password);
-			userSettings.setName(name);
-			userSettings.setBranch(branch);
-			userSettings.setDivision(division);
 		} else {
 			session.setAttribute("errorMessages", messages);
 			response.sendRedirect("./");
@@ -61,8 +50,8 @@ public class SettingsServlet extends HttpServlet {
 		}
 
 		if (request.getAttribute("userSettings") == null){
-			request.setAttribute("userSettings", userSettings);
-			}
+			request.setAttribute("userSettings", getUserById);
+		}
 
 		request.getRequestDispatcher("settings.jsp").forward(request,response);
 		return;
@@ -71,80 +60,77 @@ public class SettingsServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-
-		HttpSession session = request.getSession();
-		User changedUserInfomation = new User();
+		//セレクトボックスの値の保持用
 		List<Branch> branches = new BranchService().getBranches();
 		List<Division> divisions = new DivisionService().getDivisions();
 
-
+		//セッションの取得（エラーメッセージボックスの取得）
+		HttpSession session = request.getSession();
+		List<String> messages = new ArrayList<String>();
+		//ユーザーIDから情報を引っ張ってくる
 		String id = request.getParameter("id");
-		int Iid = Integer.parseInt(id);
-		changedUserInfomation.setId(Iid);
-		changedUserInfomation.setLoginId(request.getParameter("loginId"));
-		changedUserInfomation.setName(request.getParameter("name"));
-		changedUserInfomation.setBranch(request.getParameter("branch"));
-		changedUserInfomation.setDivision(request.getParameter("division"));
-		//入力した内容を取得する
+		UserService getUser = new UserService();
+		User getUserById =  getUser.getUserById(id);
+
+
+		//フォームから入力された情報を引っ張ってきてセットする
+		String loginId = request.getParameter("loginId");
+		String name = request.getParameter("name");
+		String branch = request.getParameter("branch");
+		String division = request.getParameter("division");
+
+		getUserById.setLoginId(loginId);
+		getUserById.setName(name);
+		getUserById.setBranch(branch);
+		getUserById.setDivision(division);
+
+		//パスワードの情報をフォームから取得
 		String inputPassword = request.getParameter("password");
 
-
-		String notChangedPassword = request.getParameter("notChangedPassword");
-		//入力した内容が空だったら
+		//フォームが空だったら、既存のパスワードをセットする。
 		if(inputPassword.isEmpty()){
-			//暗号化されたパスワードをセット
-			changedUserInfomation.setPassword(notChangedPassword);
-		//違ったら
-		}else{
-			//入力した内容をセット
-			changedUserInfomation.setPassword(inputPassword);
+			inputPassword = getUserById.getPassword();
 		}
-
-		List<String> messages = new ArrayList<String>();
+		System.out.println(inputPassword);
 
 		//バリデーションエラー
 		if(isValid(request, messages) == false){
 			session.setAttribute("errorMessages", messages);
 			request.setAttribute("divisions",divisions);
 			request.setAttribute("branches", branches);
-			request.setAttribute("userSettings", changedUserInfomation);
+			request.setAttribute("userSettings", getUserById);
 			request.getRequestDispatcher("settings.jsp").forward(request,response);
 			return;
 		}
 
-		//パスワードが変更されてたら
-		if(changedUserInfomation.getPassword().equals(inputPassword)) {
-
-			//パスワードを暗号化するメソッドを選択してアプデ
-			bbs.service.UserService Settings = new UserService();
-			Settings.upDate(changedUserInfomation);
-
-		//そうじゃなくて、バリデーションエラーがなくて、入っている値が暗号化されたパスワードだったら
-		} else if (changedUserInfomation.getPassword().equals(notChangedPassword)) {
-			bbs.service.UserService Settings = new UserService();
+		//入力した内容が空だったら（inputPasswordが既存のパスワード入っていなかったら）
+		if(inputPassword.equals(getUserById.getPassword())) {
 			//パスワードを暗号化しないメソッドを選択してアプデ
-			Settings.upDate2(changedUserInfomation);
-		}else{
-
-			request.setAttribute("divisions",divisions);
-			request.setAttribute("branches", branches);
-			request.setAttribute("userSettings", changedUserInfomation);
-			request.getRequestDispatcher("settings.jsp").forward(request,response);
-			return;
+			getUser.upDate2(getUserById);
 		}
 
-		if(changedUserInfomation != null){
-			response.sendRedirect("usercontroll");
-			return;
+		//入力内容が空じゃなかったら
+		if (!inputPassword.equals(getUserById.getPassword())) {
+			//パスワードを暗号化するメソッドを選択してアプデ
+			getUserById.setPassword(inputPassword);
+			getUser.upDate(getUserById);
+		}
+
+		response.sendRedirect("usercontroll");
+		return;
 		}
 
 
 
-	}
 	//エラーチェックメソッド
 	private boolean isValid(HttpServletRequest request, List<String> messages){
 		UserService checkLoginId = new UserService();
-		//フォームに入力されたログインID
+
+		String id = request.getParameter("id");
+
+		UserService getUser = new UserService();
+		User getUserById =  getUser.getUserById(id);
+		//フォームに登録されたログインID
 		String loginId = request.getParameter("loginId");
 		User getloginID =  checkLoginId.checkLoginId(loginId);
 		String seachedLoginId = "捨て文字列";
@@ -153,7 +139,7 @@ public class SettingsServlet extends HttpServlet {
 		}
 
 		//表示されてたログインID
-		String loginId2 = request.getParameter("loginId2");
+		String loginId2 = getUserById.getLoginId();
 
 
 		String name = request.getParameter("name");
@@ -182,7 +168,7 @@ public class SettingsServlet extends HttpServlet {
 		if(10 < name.length()){
 			messages.add("名称は10文字以下を入力してください");
 		}
-		if(password.length() < 6 || password.length() > 255){
+		if(StringUtils.isBlank(password) == false && password.length() < 6 || password.length() > 255){
 			messages.add("パスワードは6文字以上255文字以下を入力してください");
 		}
 

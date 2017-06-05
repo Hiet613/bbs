@@ -36,10 +36,15 @@ public class DeleteUserServlet extends HttpServlet{
 			userService.delete(user);
 
 			if(user != null){
+
+				messages.add("ユーザー「" +request.getParameter("name")+"」を削除しました");
+				session.setAttribute("errorMessages" ,messages);
+
 				response.sendRedirect("usercontroll");
 			}
 
 		} else {
+
 			session.setAttribute("errorMessages", messages);
 			response.sendRedirect("usercontroll");
 			return;

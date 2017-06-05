@@ -46,10 +46,9 @@
 
 
 
-				<c:if test= "${loginUser.division != userSettings.division}">
-
-
-					支店:
+				<c:choose>
+				<c:when test= "${userSettings.id != loginUser.id}">
+				支店:
 				<div class= "branch">
 					<select name="branch">
 					<c:forEach items = "${branches}" var="branches">
@@ -71,9 +70,14 @@
 					</select>
 				<br />
 				</div>
-				</c:if>
+				</c:when>
 
-				<input type="submit" value="登録" /> <br />
+				<c:otherwise>
+				<input type="hidden" name="branch" value="${userSettings.branch }" />
+				<input type="hidden" name="division" value="${userSettings.division }" />
+				</c:otherwise>
+				</c:choose>
+				<input type="submit" value="この内容で編集する" /> <br />
 				<a href="./">ホームへ</a>
 			</form>
 				<a href="usercontroll">戻る</a>

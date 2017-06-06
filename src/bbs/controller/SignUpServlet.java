@@ -101,11 +101,9 @@ public class SignUpServlet extends HttpServlet {
 			messages.add("このログインIDはすでに使用されています");
 		}
 
-		if(branch.equals("1") && division.equals("3")|| division.equals("1") && !branch.equals("1")|| division.equals("2") && !branch.equals("1")){
-			messages.add("この組み合わせの登録は許されていません");
-		}
 
-		if(!loginId.matches("^\\w{6,20}$")){
+
+		if(StringUtils.isEmpty(loginId) == false && !loginId.matches("^\\w{6,20}$")){
 			messages.add("ログインIDは半角英数字6文字以上20字以下を入力してください");
 		}
 
@@ -123,6 +121,9 @@ public class SignUpServlet extends HttpServlet {
 		}
 		if(10 < name.length()){
 			messages.add("名称は10文字以下を入力してください");
+		}
+		if(branch.equals("1") && division.equals("3")|| division.equals("1") && !branch.equals("1")|| division.equals("2") && !branch.equals("1")){
+			messages.add("支店と部署・役職につき、この組み合わせの登録は許されていません");
 		}
 
 		// TODO アカウントが既に利用されていないか、メールアドレスが既に登録されていないかなどの確認も必要

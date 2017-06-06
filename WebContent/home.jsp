@@ -20,6 +20,17 @@
 			// 「OK」時の処理終了
 			return false;
 		}
+
+
+		function disp(){
+			if(window.confirm('この投稿を削除します')){
+				location.href = "./";
+				return true;
+			}
+				// 「OK」時の処理終了
+				return false;
+			}
+
 		 -->
 		</script>
 
@@ -57,35 +68,30 @@
 	<br>
 		<a href="newMessage">新規投稿画面へ</a>
 		<div class = "title">名前：<c:out value="${loginUser.name }"/></div>
-		<div class = "title">部署：<c:out value="${loginUser.division }"/></div>
+
+		<div class = "title">店名：
+			<c:forEach items="${branches}" var="branch">
+				<c:if test="${ loginUser.branch == branch.id}">
+					<c:out value="${branch.name }"/>
+				</c:if>
+			</c:forEach>
+		</div>
 		<form action="./" method="get">
-			<input type="date" name="startDate" >～<input type="date" name="endDate" >
+			<input type="date" name="startDate" value="${startDate}" >～<input type="date" value="${endDate}" name="endDate" >
 			<br>
 			カテゴリ:
-			<%--カテゴリの中身が空じゃなかったら出す --%>
-			<c:if test="${ not empty categories }">
 			<div class="categories">
 				<select name="category">
 					<option value=""><c:out value=""/></option>
 						<c:forEach items = "${categories}" var="category">
-					<option value="${category.category}"><c:out value="${category.category}"/></option>
+					<option value="${category.category}"<c:if test="${category.category == selectedCategory}">selected
+					</c:if>
+					><c:out value="${category.category}"/></option>
 				</c:forEach>
 				</select>
 			</div>
 
-			</c:if>
-			<%--メッセージ領域のカテゴリが０でなく、カテゴリ領域がないとき出す --%>
-			<c:if test="${messages.size() != 1 && empty categories }">
-				<div class= "category">
-					<select name="category">
-						<option value=""><c:out value=""/></option>
-							<c:forEach items = "${messages}" var="message">
-						<option value="${message.category}"><c:out value="${message.category}"/></option>
-						</c:forEach>
-					</select>
-				<br />
-			</div>
-			</c:if>
+
 			<input type="submit" value="絞り込む"/>
 		</form>
 
@@ -103,41 +109,20 @@
 			<div class = "category">カテゴリ：<c:out value="${message.category }"/></div>
 			<div class = "id"> メッセージID :<c:out value = "${message.id }" /> </div>
 			<div class = "title">件名：<c:out value="${message.title }"/></div>
-
 			本文<br>
 			<c:forEach var="splitedMessage" items="${fn:split(message.messages,'
 			')}">
-
 			<div class = "splitedMessage"><c:out value="${splitedMessage}"/><br></div>
 			</c:forEach>
-
-			投稿日時：<div class = "date"><fmt:formatDate value="${message.insertDate }"  pattern="yyyy年MM月dd日（E） HH:mm"/></div>
-
-
+			投稿日時：
+			<div class = "date" style="display:inline;" ><fmt:formatDate value="${message.insertDate }"  pattern="yyyy年MM月dd日（E） HH:mm"/></div>
 			<c:if test="${ loginUser.division == 2 || message.userId == loginUser.id || message.branch == loginUser.branch && loginUser.division == 3}">
 				<form action="delete" method="post">
 					<input type="hidden" name="messageId" value="${message.id }" />
 					<input type="hidden" name="title" value="${message.title}" />
-					<script type="text/javascript">
-							document.write()
-							function disp(){
-								// 「OK」時の処理開始 ＋ 確認ダイアログの表示
-								if(window.confirm('本当にいいんですね？')){
-									location.href = "./";
-								}
-								// 「OK」時の処理終了
-								// 「キャンセル」時の処理開始
-								else{
-									window.alert('キャンセルされました'); // 警告ダイアログを表示
-								}
-								// 「キャンセル」時の処理終了
-							}
-							// -->
-							</script>
-					<input type="submit" value="削除する" onClick="disp()">
+					<input type="submit" value="削除する" onClick="return disp()">
 				</form>
 			</c:if>
-
 			<form action="comment" method="post">
 				<input type="submit" value="コメントする"/>
 				<c:choose>
@@ -151,39 +136,32 @@
 				</c:choose>
 				<input type="hidden" name="id" value="${message.id}" />
 			</form>
-
-
 			<c:forEach items = "${comments}" var="comments">
-			<c:if test="${comments.messageId == message.id}">
+				<c:if test="${comments.messageId == message.id}">
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~コメント~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-				<div class = "comments" >
-					<c:forEach var="splitedComment" items="${fn:split(comments.comment,'
-			')}">
-
-			<div class = "splitedComment"><c:out value="${splitedComment}"/><br></div>
+	~~~~~~~~~~~~~~~~~~~~~~~~~~コメント~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					<div class = "comments" >
+						<c:forEach var="splitedComment" items="${fn:split(comments.comment,'
+						')}">
+						<div class = "splitedComment"><c:out value="${splitedComment}"/><br></div>
+						</c:forEach>
+						<span class ="insertDate">コメント日時：<fmt:formatDate value="${comments.insertDate}"  pattern="yyyy年MM月dd日（E） HH:mm"/></span>
+						<br>
+						<span class ="commentUser">投稿者：<c:out value="${comments.name}"/></span>
+						<span class ="commentId">コメントID：<c:out value="${comments.commentId}"/></span>
+						<br>
+					</div>
+					<c:if test="${ loginUser.division == 2 || comments.userId == loginUser.id || comments.branch == loginUser.branch && loginUser.division == 3 }">
+						<form action="deleteComment" method="post">
+							<input type="hidden" name="commentId" value="${comments.commentId }" />
+							<input type="hidden" name="comment" value="${comments.comment}" />
+							<input type="submit" value="削除する" onClick="return dispComment()">
+						</form>
+					</c:if>
+				</c:if>
 			</c:forEach>
-					<span class ="insertDate">コメント日時：<fmt:formatDate value="${comments.insertDate}"  pattern="yyyy年MM月dd日（E） HH:mm"/></span>
-					<br>
-					<span class ="commentUser">投稿者：<c:out value="${comments.name}"/></span>
-					<span class ="commentId">コメントID：<c:out value="${comments.commentId}"/></span>
-					<br>
-
-				</div>
-			<c:if test="${ loginUser.division == 2 || comments.userId == loginUser.id || comments.branch == loginUser.branch && loginUser.division == 3 }">
-				<form action="deleteComment" method="post">
-					<input type="hidden" name="commentId" value="${comments.commentId }" />
-					<input type="hidden" name="comment" value="${comments.comment}" />
-
-					<input type="submit" value="削除する" onClick="return dispComment()">
-				</form>
-			</c:if>
-
-			</c:if>
-			</c:forEach>
-
 			<br>
-	＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 			<br />
 		</c:forEach>
 	</div>

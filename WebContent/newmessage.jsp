@@ -56,5 +56,6 @@
 
 </div>
 <a href="./">戻る</a>
+	<div class="copyright">Copyright(c)Hitoshi Kawase</div>
 </body>
 </html>

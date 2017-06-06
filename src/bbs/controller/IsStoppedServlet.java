@@ -1,12 +1,15 @@
 package bbs.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import bbs.beans.User;
 import bbs.service.UserService;
@@ -23,7 +26,15 @@ public class IsStoppedServlet extends HttpServlet{
 		String id = request.getParameter("id");
 		int Iid = Integer.parseInt(id);
 
+		HttpSession session = request.getSession();
+		List<String> messages = new ArrayList<String>();
 		String isStopped = request.getParameter("isStopped");
+
+		if (isValid(request, messages) == false) {
+			session.setAttribute("errorMessages", messages);
+			request.getRequestDispatcher("usercontroll").forward(request,response);
+			return;
+		}
 
 		if(isStopped.equals("0")){
 			isStopped = "1";
@@ -33,15 +44,26 @@ public class IsStoppedServlet extends HttpServlet{
 		userIsStopped.setId(Iid);
 		userIsStopped.setIsStopped(isStopped);
 
-
 		bbs.service.UserService UserService = new UserService();
 		UserService.isStopped(userIsStopped);
 
 		if(userIsStopped != null){
-
-
 			response.sendRedirect("usercontroll");
+		}
+	}
 
+
+	private boolean isValid(HttpServletRequest request, List<String> messages){
+		User user = (User) request.getSession().getAttribute("loginUser");
+		String id = request.getParameter("id");
+		int Iid = Integer.parseInt(id);
+		if(user.getId() == Iid){
+			messages.add("自分を停止することはできません");
+		}
+		if(messages.size() == 0) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

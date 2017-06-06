@@ -14,6 +14,49 @@ import bbs.beans.UserMessages;
 import bbs.exception.SQLRuntimeException;
 
 public class UserMessagesDao {
+
+
+
+//	//DBのuser_nessages ビューからカテゴリを取得するＤＡＯ
+	public List<UserMessages> getCategories(Connection connection){
+
+		PreparedStatement ps = null;
+		try{
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT DISTINCT category FROM users_messages ");
+
+			ps = connection.prepareStatement(sql.toString());
+
+			ResultSet rs = ps.executeQuery();
+			List<UserMessages> ret =categoryList(rs);
+			return ret;
+		} catch (SQLException e) {
+			throw new SQLRuntimeException (e) ;
+		} finally {
+			close(ps);
+		}
+	}
+	private List<UserMessages> categoryList(ResultSet rs) throws SQLException {
+
+		List<UserMessages> ret = new ArrayList<UserMessages>();
+		try{
+			while (rs.next()){
+
+				String category = rs.getString("category");
+
+				UserMessages message = new UserMessages();
+
+				message.setCategory(category);
+
+
+				ret.add(message);
+			}
+			return ret;
+		} finally {
+			close(rs);
+		}
+	}
+
 //DBのuser_nessages ビューから値を取得するＤＡＯ
 	public List<UserMessages> getUserMessages(Connection connection, int num){
 

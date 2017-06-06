@@ -25,26 +25,22 @@
 
 			<form action="settings" method="post"><br />
 
-				<label for="account">ログインID(半角英数字6文字以上20字以下)</label>
-				<input name="loginId" value="${userSettings.loginId}" /> <br />
-
+				<label for="account">ログインID</label>
+				<input name="loginId" value="${userSettings.loginId}" />（半角英数6文字以上20字以下）<br />
 				<input type="hidden" name="loginId2" value="${userSettings.loginId}" />
-				<label for="name">名称(10文字以下)</label>
-				<input name="name" value="${userSettings.name}" id="name"/><br />
 
-				<input type="hidden" name="id" value="${userSettings.id }" />
-
-				<div class ="notChangedPassword">パスワードが入力されない場合は、それ以外の情報が更新されます。
 				<input type="hidden" name="notChangedPassword" value="${userSettings.password }" />
-				</div>
 
 				<label for="password">パスワード</label>
-				<input name="password" type="password" id="password"/> <br />
+				<input name="password" type="password" id="password"/>（6文字以上20文字以下) <br />
 
 				<label for="password2">パスワード確認用</label>
 				<input name="password2" type="password" id="password2"/> <br />
 
+				<label for="name">名称</label>
+				<input name="name" value="${userSettings.name}" id="name"/>（10文字以下）<br />
 
+				<input type="hidden" name="id" value="${userSettings.id }" />
 
 				<c:choose>
 				<c:when test= "${userSettings.id != loginUser.id}">
@@ -81,7 +77,8 @@
 				<a href="./">ホームへ</a>
 			</form>
 				<a href="usercontroll">戻る</a>
-			<div class="copyright">Copyright(c)Hitoshi Kawase</div>
+
 		</div>
+		<div class="copyright">Copyright(c)Hitoshi Kawase</div>
 	</body>
 </html>

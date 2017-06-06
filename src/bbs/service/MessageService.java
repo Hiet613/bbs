@@ -35,6 +35,8 @@ public class MessageService {
 	}
 	private static final int LIMIT_NUM = 1000;
 
+
+	//投稿情報取得メソッド
 	public List<UserMessages> getMessage(){
 
 		Connection connection = null;
@@ -58,6 +60,33 @@ public class MessageService {
 		}
 
 	}
+
+
+
+	public List<UserMessages> getCategories(){
+
+		Connection connection = null;
+		try{
+			connection =getConnection();
+
+			UserMessagesDao UserMessagesDao = new UserMessagesDao();
+			List<UserMessages> ret = UserMessagesDao.getCategories(connection);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e){
+			rollback(connection);
+			throw e;
+		} catch (Error e){
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+
+	}
+//投稿削除メソッド
 
 	public void delete(Message message) {
 

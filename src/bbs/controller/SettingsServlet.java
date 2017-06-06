@@ -18,6 +18,7 @@ import bbs.beans.Division;
 import bbs.beans.User;
 import bbs.service.BranchService;
 import bbs.service.DivisionService;
+import bbs.service.UserControllService;
 import bbs.service.UserService;
 
 @WebServlet(urlPatterns = { "/settings" })
@@ -36,16 +37,17 @@ public class SettingsServlet extends HttpServlet {
 		String id = request.getParameter("id");
 		User getUserById =  getUser.getUserById(id);
 
-		if (isValid2(request, messages) == true) {
-			List<Branch> branches = new BranchService().getBranches();
-			List<Division> divisions = new DivisionService().getDivisions();
-			request.setAttribute("divisions",divisions);
-			request.setAttribute("branches", branches);
-			System.out.println(getUserById.getName());
+		List<Branch> branches = new BranchService().getBranches();
+		List<Division> divisions = new DivisionService().getDivisions();
+		request.setAttribute("divisions",divisions);
+		request.setAttribute("branches", branches);
 
-		} else {
+		if(getUserById==null){
+			messages.add("不正なアクセスです");
 			session.setAttribute("errorMessages", messages);
-			response.sendRedirect("./");
+			List<User> userinfomation = new UserControllService().getUserInfomarion();
+			session.setAttribute("userinfomations", userinfomation);
+			response.sendRedirect("usercontroll");
 			return;
 		}
 
@@ -91,7 +93,6 @@ public class SettingsServlet extends HttpServlet {
 		if(inputPassword.isEmpty()){
 			inputPassword = getUserById.getPassword();
 		}
-		System.out.println(inputPassword);
 
 		//バリデーションエラー
 		if(isValid(request, messages) == false){
@@ -152,11 +153,7 @@ public class SettingsServlet extends HttpServlet {
 		if(!loginId.equals(loginId2) && seachedLoginId.equals(loginId)){
 			messages.add("このログインIDはすでに使用されています");
 		}
-
-		if(branch.equals("1") && division.equals("3")|| division.equals("1") && !branch.equals("1")|| division.equals("2") && !branch.equals("1")){
-			messages.add("この組み合わせの登録は許されていません");
-		}
-		if(!loginId.matches("^\\w{6,20}$")){
+		if(StringUtils.isEmpty(loginId) == false && !loginId.matches("^\\w{6,20}$")){
 			messages.add("ログインIDは半角英数字6文字以上20字以下を入力してください");
 		}
 		if(StringUtils.isEmpty(loginId) == true){
@@ -171,12 +168,14 @@ public class SettingsServlet extends HttpServlet {
 		if(StringUtils.isBlank(password) == false && password.length() < 6 || password.length() > 255){
 			messages.add("パスワードは6文字以上255文字以下を入力してください");
 		}
-
 		if(!password.equals(password2)){
 			messages.add("入力したパスワードが一致していません");
 		}
-		/*TODOアカウントがすでに利用されていないか、ログインIDが
-		 * すでに登録されていないかどうかなどの確認も必要*/
+
+		if(branch.equals("1") && division.equals("3")|| division.equals("1") && !branch.equals("1")|| division.equals("2") && !branch.equals("1")){
+			messages.add("支店と部署・役職につき、この組み合わせの登録は許されていません");
+		}
+
 		if (messages.size()==0){
 			return true;
 		} else {
@@ -184,18 +183,7 @@ public class SettingsServlet extends HttpServlet {
 
 		}
 	}
-	private boolean isValid2(HttpServletRequest request, List<String> messages){
-		User user = (User) request.getSession().getAttribute("loginUser");
 
-		if(user.getDivision() != 1){
-			messages.add("このページにアクセスする権限はありません。");
-		}
-		if(messages.size() == 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 }
 
 

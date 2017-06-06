@@ -24,7 +24,7 @@
 			</c:if>
 			<form action="signup" method="post"><br />
 				<label for="loginId">ログインID</label>
-				<input name="loginId" value="${userSettings.loginId}" id="loginId"/>（半角英数6文字以上20字以下）
+				<input name="loginId" style="ime-mode:disabled"   value="${userSettings.loginId}" id="loginId"/>（半角英数6文字以上20字以下）
 				<label for="password">パスワード</label>
 				<input name="password" type="password" id="password"/>（6文字以上20文字以下） <br />
 
@@ -37,11 +37,9 @@
 				<div class= "branch">
 					<select name="branch">
 					<c:forEach items = "${branches}" var="branches">
-
 					<option value="${branches.id}" <c:if test="${userSettings.branch == branches.id}">selected
 					</c:if>
 					><c:out value="${branches.name}"/></option>
-
 					</c:forEach>
 					</select>
 				</div>
@@ -60,7 +58,8 @@
 
 			</form>
 			<a href="usercontroll">戻る</a>
-			<div class="copyright">Copyright(c)Hitoshi Kawase</div>
+
 		</div>
+		<div class="copyright">Copyright(c)Hitoshi Kawase</div>
 	</body>
 </html>

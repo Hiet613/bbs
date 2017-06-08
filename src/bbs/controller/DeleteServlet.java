@@ -25,7 +25,7 @@ public class DeleteServlet extends HttpServlet{
 
 		HttpSession session = request.getSession();
 		List<String> messages = new ArrayList<String>();
-		messages.add("不正なアクセスです");
+		messages.add("・不正なアクセスです");
 		session.setAttribute("errorMessages", messages);
 		response.sendRedirect("./");
 		return;
@@ -49,7 +49,7 @@ public class DeleteServlet extends HttpServlet{
 		messageService.delete(message);
 
 		if(message != null){
-			messages.add("件名が「"+ request.getParameter("title") + "」の投稿を削除しました" );
+			messages.add("・件名が「"+ request.getParameter("title") + "」の投稿を削除しました" );
 			session.setAttribute("errorMessages", messages);
 
 			response.sendRedirect("./");

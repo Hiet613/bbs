@@ -48,13 +48,14 @@ public class HomeServlet extends HttpServlet {
 			return;
 		}
 
-		if(startDate.isEmpty()){
+		if(startDate == null || startDate.isEmpty() ){
 			startDate = "2010-01-01";
 		}else{
 			request.setAttribute("startDate", startDate);
 		}
 
-		if(endDate.isEmpty()){
+
+		if( endDate == null || endDate.isEmpty() ){
 			endDate = "2100-05-26" + " 23:59:59";
 		} else {
 			request.setAttribute("endDate", endDate);
@@ -65,11 +66,11 @@ public class HomeServlet extends HttpServlet {
 
 
 		if (diff > 0) {
-			errorMessages.add("選択された日付の始期と終期が不正です。リセットボタンを押すか、正しい日付を選択してください。");
+			errorMessages.add("・選択された日付の始期と終期が不正です。リセットボタンを押すか、正しい日付を選択してください。");
 			}
 
 
-		if(category.isEmpty()){
+		if(category==null|| category.isEmpty()){
 			List<UserMessages> narrowedMessages = new MessageService().getNarrowedMessages(startDate,endDate);
 			request.setAttribute("messages", narrowedMessages);
 			//カテゴリセレクトボックス保持のため

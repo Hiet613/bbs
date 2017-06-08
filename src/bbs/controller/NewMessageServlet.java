@@ -62,22 +62,22 @@ public class NewMessageServlet extends HttpServlet {
 		String category = request.getParameter("category");
 
 		if(StringUtils.isBlank(title) == true){
-			messages.add("件名を入力してください");
+			messages.add("・件名を入力してください");
 		}
 		if(50 < title.length()) {
-			messages.add("件名は50文字以下で入力してください");
+			messages.add("・件名は50文字以下で入力してください");
 		}
 		if(StringUtils.isBlank(message) == true){
-			messages.add("本文を入力してください");
+			messages.add("・本文を入力してください");
 		}
 		if(1000 < message.length()) {
-			messages.add("本文は1000文字以下で入力してください");
+			messages.add("・本文は1000文字以下で入力してください");
 		}
 		if(10 < category.length()) {
-			messages.add("カテゴリは10文字以下で入力してください");
+			messages.add("・カテゴリは10文字以下で入力してください");
 		}
 		if(StringUtils.isBlank(category) == true){
-			messages.add("カテゴリを入力してください");
+			messages.add("・カテゴリを入力してください");
 		}
 		if(messages.size() == 0) {
 			return true;

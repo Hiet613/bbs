@@ -38,11 +38,11 @@ public class LoginCheckFilter implements Filter {
 			request.setCharacterEncoding(encoding);
 		}
 
-		if(!req.getServletPath().equals("/login") ){
+		if(!(req.getServletPath().contains("/login") || req.getServletPath().contains("/css"))){
 			HttpSession session = req.getSession();
 			user = (User) session.getAttribute("loginUser");
 			if(user == null){
-				messages.add("ログインしていません");
+				messages.add("・ログインしていません");
 				session.setAttribute("errorMesseges", messages);
 				res.sendRedirect("login");
 				return;
@@ -62,7 +62,7 @@ public class LoginCheckFilter implements Filter {
 
 
 		if(!req.getServletPath().equals("/login") && user.getIsStopped() == 1 ){
-			messages.add("このユーザーの権限は停止されています");
+			messages.add("・このユーザーの権限は停止中です");
 			session.setAttribute("errorMesseges", messages);
 			res.sendRedirect("login");
 			return;

@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet{
 			response.sendRedirect("./");
 		} else {
 			List<String> messages = new ArrayList<String>();
-			messages.add("ログインに失敗しました");
+			messages.add("・ログインに失敗しました");
 
 			session.setAttribute("errorMesseges", messages);
 			request.setAttribute("loginId",loginId);

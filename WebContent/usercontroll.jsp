@@ -7,7 +7,6 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
 		<title>ユーザー管理画面</title>
 		<script type="text/javascript">
 		<!--
@@ -45,44 +44,48 @@
 	<link href="./css/style.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
-		<div class="main-contents">
-			<%--ログインしてる時 --%>
-			<c:if test="${ not empty loginUser }">
-				<a href="logout">ログアウト</a>
-			<br>
-			</c:if>
+
+		<div class="modoru3" >
+		<c:if test="${ not empty errorMessages }">
+			<div class="errorMessages">
+				<ul>
+					<c:forEach items="${errorMessages}" var="message">
+						<li><c:out value="${message}" />
+					</c:forEach>
+				</ul>
 			</div>
-			<a href="./">戻る</a>
-			<c:if test="${ not empty errorMessages }">
-				<div class="errorMessages">
-					<ul>
-						<c:forEach items="${errorMessages}" var="message">
-							<li><c:out value="${message}" />
-						</c:forEach>
-					</ul>
-				</div>
-				<c:remove var="errorMessages" scope="session"/>
-			</c:if>
-			<h1>ユーザー管理画面</h1>
-			<form action="signup" method="get"><br />
-			<input type="submit" value="ユーザー新規登録" /> <br />
-			</form>
-		<div  >
-			<p>ユーザーのログインID・名称一覧</p>
+			<c:remove var="errorMessages" scope="session"/>
+		</c:if>
+		</div>
+		<div class="back" style="display:inline;">
+			<a href="./" style="display:inline;">戻る</a>
+		</div>
+		<div style="display:inline;" class="signup">
+			<a href="signup">ユーザー新規登録</a>
+		</div>
+		<h1 align="center" >ユーザー管理画面</h1>
+
+		<div align="center" >
+
+			<p>ユーザー情報一覧</p>
+
 			<table border="1">
-				<tr>
-					<th>名称</th>
+				<tr style="background:  #00FF66">
+					<th>名  称</th>
 					<th>ログインＩＤ</th>
-					<th>支店　</th>
-					<th>役職部署　</th>
-					<th>状況　</th>
-					<th>削除 </th>
+					<th>支  店</th>
+					<th>役職・部署</th>
+					<th>状　態</th>
+					<th>状 態 変 更</th>
+					<th>削  除</th>
 				</tr>
+
 				<c:forEach items = "${userinfomations}" var="userinfomation">
-					<tr>
+					<tr align="center">
 						<td>
-							<c:out value="${userinfomation.name }"/><input type="hidden" name="id" value="${userinfomation.id }" />
+							<b><c:out value="${userinfomation.name }"/></b><input type="hidden" name="id" value="${userinfomation.id }" />
 						</td>
+
 						<td>
 							<c:out value="${userinfomation.loginId }"/></td>
 						<td>
@@ -92,6 +95,7 @@
 								</c:if>
 							</c:forEach>
 						</td>
+
 						<td>
 							<c:forEach items="${divisions}" var="division">
 								<c:if test="${ division.id == userinfomation.division}">
@@ -99,20 +103,24 @@
 								</c:if>
 							</c:forEach>
 						</td>
+
 						<td>
 							<c:if test="${userinfomation.getIsStopped() == 0 }">
 								<c:out value="稼働中"/>
 							</c:if>
 							<c:if test="${userinfomation.getIsStopped() == 1 }">
-								<c:out value="停止中"/>
+								<span style="background: #FFFF99;">停止中</span>
 							</c:if>
-							<c:if test="${userinfomation.isStopped == 0 && userinfomation.id != loginUser.id }" >
+						</td>
+
+						<td>
+						<c:if test="${userinfomation.isStopped == 0 && userinfomation.id != loginUser.id }" >
 								<form action="isstopped" method="get">
 									<input type="hidden" name="isStopped" value="${userinfomation.isStopped }" />
 									<input type="hidden" name="id" value="${userinfomation.id }" />
 									<script type="text/javascript">
 									</script>
-									<p style="display:inline;"><input type="submit" value="停止する"  onClick="return disp()"></p>
+									<p style="display:inline;"><input  type="submit" value="停止する"  onClick="return disp()"></p>
 								</form>
 							</c:if>
 							<c:if test="${userinfomation.isStopped == 1 }" >
@@ -124,14 +132,16 @@
 							</c:if>
 						</td>
 						<td>
+							<div class="button">
 							<c:if test="${userinfomation.id != loginUser.id }" >
 									<%-- ユーザーの削除（ポストメソッド）で送信する  --%>
 									<form action="deleteUser" method="post" class="deleteUser">
 										<input type="hidden" name= "id" value="${userinfomation.id }" />
 										<input type="hidden" name= "name" value="${userinfomation.name }" />
-										<p><input type="submit" value="削除する" onClick="return dispUser()"></p>
+										<input type="submit" value="削除する" onClick="return dispUser()">
 									</form>
 							</c:if>
+							</div>
 						</td>
 						<td>
 							<form action="settings" method="get">
@@ -142,21 +152,12 @@
 					</tr>
 				</c:forEach>
 			</table>
+
 			<c:if test="${not empty userinfomations }">
-			<div class="userinfomations">
-				<ul>
-					<c:forEach items="${userinfomations}" var="userinfomation">
-					</c:forEach>
-				</ul>
-			</div>
 				<c:remove var="userinfomation" scope="session"/>
 			</c:if>
 		</div>
 
-			<div class="copyright">Copyright(c)Hitoshi Kawase</div>
-
-
-
+		<div class="copyright">Copyright(c)Hitoshi Kawase</div>
 	</body>
-
 </html>

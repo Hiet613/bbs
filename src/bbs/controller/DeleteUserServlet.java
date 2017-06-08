@@ -27,7 +27,7 @@ public class DeleteUserServlet extends HttpServlet{
 
 		HttpSession session = request.getSession();
 		List<String> messages = new ArrayList<String>();
-		messages.add("不正なアクセスです");
+		messages.add("・不正なアクセスです");
 		session.setAttribute("errorMessages", messages);
 		response.sendRedirect("./");
 		return;
@@ -52,9 +52,8 @@ public class DeleteUserServlet extends HttpServlet{
 
 			if(user != null){
 
-				messages.add("ユーザー「" +request.getParameter("name")+"」を削除しました");
+				messages.add("・ユーザー「" +request.getParameter("name")+"」を削除しました");
 				session.setAttribute("errorMessages" ,messages);
-
 				response.sendRedirect("usercontroll");
 			}
 
@@ -79,7 +78,7 @@ public class DeleteUserServlet extends HttpServlet{
 
 
 		if(Ii == user.getId()){
-			messages.add("自分を削除することはできません");
+			messages.add("・自分を削除することはできません");
 		}
 
 		if(messages.size() == 0) {

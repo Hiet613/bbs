@@ -30,6 +30,10 @@ public class IsStoppedServlet extends HttpServlet{
 		List<String> messages = new ArrayList<String>();
 		String isStopped = request.getParameter("isStopped");
 
+		UserService getUser = new UserService();
+		User getUserById =  getUser.getUserById(id);
+
+
 		if (isValid(request, messages) == false) {
 			session.setAttribute("errorMessages", messages);
 			request.getRequestDispatcher("usercontroll").forward(request,response);
@@ -47,8 +51,18 @@ public class IsStoppedServlet extends HttpServlet{
 		bbs.service.UserService UserService = new UserService();
 		UserService.isStopped(userIsStopped);
 
-		if(userIsStopped != null){
+		if(userIsStopped != null && isStopped.equals("0")){
+			messages.add("・ユーザー「" +getUserById.getName()+"」を復活させました");
+			session.setAttribute("errorMessages" ,messages);
 			response.sendRedirect("usercontroll");
+			return;
+		}
+
+		if(userIsStopped != null && isStopped.equals("1")){
+			messages.add("・ユーザー「" +getUserById.getName()+"」を停止しました");
+			session.setAttribute("errorMessages" ,messages);
+			response.sendRedirect("usercontroll");
+			return;
 		}
 	}
 
@@ -58,7 +72,7 @@ public class IsStoppedServlet extends HttpServlet{
 		String id = request.getParameter("id");
 		int Iid = Integer.parseInt(id);
 		if(user.getId() == Iid){
-			messages.add("自分を停止することはできません");
+			messages.add("・自分を停止することはできません");
 		}
 		if(messages.size() == 0) {
 			return true;

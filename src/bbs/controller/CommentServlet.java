@@ -31,7 +31,7 @@ public class CommentServlet extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		List<String> messages = new ArrayList<String>();
-		messages.add("不正なアクセスです");
+		messages.add("・不正なアクセスです");
 		session.setAttribute("errorMessages", messages);
 		response.sendRedirect("./");
 		return;
@@ -70,10 +70,10 @@ public class CommentServlet extends HttpServlet {
 		String comment = request.getParameter("comment");
 
 		if(StringUtils.isBlank(comment) == true){
-			messages.add("コメントを入力してください");
+			messages.add("・コメントを入力してください");
 		}
 		if(500 < comment.length()) {
-			messages.add("コメントは500文字以下で入力してください");
+			messages.add("・コメントは500文字以下で入力してください");
 		}
 
 		if(messages.size() == 0) {

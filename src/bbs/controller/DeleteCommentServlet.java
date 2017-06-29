@@ -49,7 +49,7 @@ public class DeleteCommentServlet extends HttpServlet{
 		commentService.delete(comment);
 
 		if(comment != null){
-			messages.add("・コメント「"+ request.getParameter("comment") + "」を削除しました" );
+			messages.add("・コメントを削除しました" );
 			session.setAttribute("errorMessages", messages);
 			response.sendRedirect("./");
 

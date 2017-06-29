@@ -68,6 +68,7 @@ public class UserMessagesDao {
 
 			ps = connection.prepareStatement(sql.toString());
 
+			//検索系SQLはexecuteQuery()メソッドを使う（Updateではない）
 			ResultSet rs = ps.executeQuery();
 			List<UserMessages> ret = toUserMessagesList(rs);
 			return ret;

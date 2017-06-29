@@ -17,9 +17,11 @@ public class DBUtil {
 	private static final String PASSWORD = "thanatos";
 
 	static {
-
+		//事前準備
 		try {
+		//JDBCドライバの有効化
 			Class.forName(DRIVER);
+		//JDBCドライバJARが見つからないときの処理
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}

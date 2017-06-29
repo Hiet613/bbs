@@ -113,6 +113,9 @@ public class SignUpServlet extends HttpServlet {
 		if(StringUtils.isBlank(password) == true) {
 			messages.add("・パスワードを入力してください");
 		}
+		if(StringUtils.isBlank(password) == false && password.length() < 6 || password.length() > 20){
+			messages.add("・パスワードは6文字以上20文字以下を入力してください");
+		}
 		if(!password.equals(password2)){
 			messages.add("・入力したパスワードが一致していません");
 		}

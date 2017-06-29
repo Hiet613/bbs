@@ -15,7 +15,7 @@
 <h1 align="center">わったい菜掲示板</h1>
 	<div class="login-main">
 		<div class="logintitle">
-			<h2 align="center">ログイン画面</h2>
+			<h2 class="h2" align="center">ログイン画面</h2>
 		</div>
 			<c:if test="${not empty errorMesseges}">
 				<div class="errorMessages">

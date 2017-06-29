@@ -45,44 +45,46 @@
 	</head>
 	<body>
 
-		<div class="modoru3" >
-		<c:if test="${ not empty errorMessages }">
-			<div class="errorMessages">
-				<ul>
-					<c:forEach items="${errorMessages}" var="message">
-						<li><c:out value="${message}" />
-					</c:forEach>
-				</ul>
-			</div>
-			<c:remove var="errorMessages" scope="session"/>
-		</c:if>
-		</div>
-		<div class="back" style="display:inline;">
+
+		<div class="back3" style="display:inline;">
 			<a href="./" style="display:inline;">戻る</a>
 		</div>
-		<div style="display:inline;" class="signup">
-			<a href="signup">ユーザー新規登録</a>
+
+		<div class="signup">
+		<a href="signup">ユーザー新規登録</a>
 		</div>
-		<h1 align="center" >ユーザー管理画面</h1>
+		<div class="user-table" >
 
-		<div align="center" >
+		<h1 class="user-title2"  align="center">ユーザー管理画面</h1>
+		<br>
+		<c:if test="${ not empty errorMessages }">
+				<div class="errorMessages" align="left" style="margin-left:22%">
+					<ul>
+						<c:forEach items="${errorMessages}" var="message">
+							<li><c:out value="${message}" />
+						</c:forEach>
+					</ul>
+				</div>
+				<c:remove var="errorMessages" scope="session"/>
+			</c:if>
 
-			<p>ユーザー情報一覧</p>
-
-			<table border="1">
-				<tr style="background:  #00FF66">
+			<table  class="table" border="1">
+				<tr style="background:  #B0E0E6">
 					<th>名  称</th>
 					<th>ログインＩＤ</th>
 					<th>支  店</th>
 					<th>役職・部署</th>
 					<th>状　態</th>
+					<th>編　集</th>
 					<th>状 態 変 更</th>
 					<th>削  除</th>
+
+
 				</tr>
 
 				<c:forEach items = "${userinfomations}" var="userinfomation">
-					<tr align="center">
-						<td>
+					<tr align="center" >
+						<td  class="tr" >
 							<b><c:out value="${userinfomation.name }"/></b><input type="hidden" name="id" value="${userinfomation.id }" />
 						</td>
 
@@ -111,6 +113,12 @@
 							<c:if test="${userinfomation.getIsStopped() == 1 }">
 								<span style="background: #FFFF99;">停止中</span>
 							</c:if>
+						</td>
+						<td>
+							<form action="settings" method="get">
+								<input type="hidden" name="id" value="${userinfomation.id }" />
+							<input type="submit" value="編集する" />
+						</form>
 						</td>
 
 						<td>
@@ -143,12 +151,7 @@
 							</c:if>
 							</div>
 						</td>
-						<td>
-							<form action="settings" method="get">
-								<input type="hidden" name="id" value="${userinfomation.id }" />
-							<input type="submit" value="編集する" />
-						</form>
-						</td>
+
 					</tr>
 				</c:forEach>
 			</table>

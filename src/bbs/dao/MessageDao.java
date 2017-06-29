@@ -59,11 +59,14 @@ public class MessageDao {
 
 			ps = connection.prepareStatement(sql.toString());
 			ps.setInt(1, message.getId());
+
+			//送信
 			ps.executeUpdate();
 
 		} catch (SQLException e) {
 			throw new SQLRuntimeException(e);
 		} finally {
+			//接続の切断
 			close(ps);
 		}
 	}

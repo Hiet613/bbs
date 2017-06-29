@@ -11,12 +11,12 @@
 		<link href="./css/style.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
-		<div class="back">
+		<div class="back5">
 		<a href="./">戻る</a>
 
 		</div>
 		<div class="main-contents">
-		<h1 >新規投稿画面</h1>
+		<h1 class="h2" >新規投稿画面</h1>
 			<c:if test="${ not empty errorMessages }">
 				<div class="errorMessages">
 					<ul>

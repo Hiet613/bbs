@@ -117,6 +117,13 @@ public class SettingsServlet extends HttpServlet {
 			getUser.upDate(getUserById);
 		}
 
+		if(getUser != null){
+
+			messages.add("・ユーザー「" +getUserById.getName()+"(更新後の名称)」の情報を更新しました");
+			session.setAttribute("errorMessages" ,messages);
+		}
+
+
 		response.sendRedirect("usercontroll");
 		return;
 		}
@@ -165,8 +172,8 @@ public class SettingsServlet extends HttpServlet {
 		if(10 < name.length()){
 			messages.add("・名称は10文字以下を入力してください");
 		}
-		if(StringUtils.isBlank(password) == false && password.length() < 6 || password.length() > 255){
-			messages.add("・パスワードは6文字以上255文字以下を入力してください");
+		if(StringUtils.isBlank(password) == false && password.length() < 6 || password.length() > 20){
+			messages.add("・パスワードは6文字以上20文字以下を入力してください");
 		}
 		if(!password.equals(password2)){
 			messages.add("・入力したパスワードが一致していません");

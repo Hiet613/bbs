@@ -1,5 +1,5 @@
 body {
-	background-color: #AEFFBD;
+	background-color: white;
 }
 
 .main-contents {
@@ -35,7 +35,7 @@ body {
 }
 
 .branchDivision{
-	width:160px;
+	width:173px;
 	height:25px;
 }
 
@@ -47,7 +47,7 @@ body {
 .newmessage{
 	text-align: center;
 
-	margin-left:33%;
+	margin-left:35%;
 }
 
 .usercontroll{
@@ -65,13 +65,75 @@ body {
 	margin-right: auto;
 	width: 300px;
 	border-bottom: 1px groove;
+	height:100%;
+
 }
+
+p {
+   text-indent: 1em;
+  }
+
+.h1{
+	background-color: #B0E0E6;
+}
+
+.home-title{
+	background-color: #B0E0E6;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.user-controll-title{
+	background-color: #B0E0E6;
+   margin-right: 15%;
+}
+
+table.table{
+	display:inline-block;
+}
+.user-table{
+	text-align:center;
+
+
+}
+
+.h2{
+	background-color: #B0E0E6;
+}
+
+.h4{
+	background-color: #B0E0E6;
+
+	display:inline-block;
+}
+
+.user-title2{
+
+	background-color: #B0E0E6;
+	width:727px;
+	display:inline-block;
+}
+
 
 .back{
 	float:right;
 	position:fixed;
+	margin-left: 8%;
+}
+.back5{
+	float:right;
+	position:fixed;
+	margin-left: 19%;
+}
+
+
+.back3{
+	float:right;
+	position:fixed;
 	margin-left: 18%;
 }
+
 
 .comment-date2{
  float:right;
@@ -81,7 +143,7 @@ body {
 .back2{
 	float:right;
 	position:fixed;
-	margin-left: 6%;
+	margin-left: 23%;
 }
 .signup{
 	float:right;
@@ -91,12 +153,16 @@ body {
 .modoru {
 	margin-top: 10px;
 	margin-bottom: 10px;
-	margin-left: auto;
-	margin-right: auto;
+	margin-right: 15%;
+    margin-left: 15%;
 	height: 100%;
-	width: 800px;
 
 }
+
+.tr{
+	height:33px;
+}
+
 
 .modoru2 {
 	margin-top: 0px;
@@ -114,6 +180,7 @@ body {
 	border-style: groove;
 	height: 100%;
 	width: 300px;
+
 
 }
 .modoru3 {
@@ -142,6 +209,7 @@ body {
 
 .comment {
 	border-style: inset;
+	 margin-left: 20px;
 }
 
 .namedate{
@@ -152,6 +220,15 @@ body {
 
 
 	border-bottom: 1px solid ;
+}
+
+.title{
+	font-size: 20px;
+	text-indent: 1em;
+}
+
+.user-category{
+	background-color:#E0FFFF;
 }
 
 .tweet-box {
@@ -185,10 +262,22 @@ body {
 }
 
 .comments{
-	 margin-left: 20px;
+
 	 clear:both;
 
 
+
+}
+
+
+.comments2{
+	text-indent: 1em;
+	 word-wrap:break-all;
+}
+
+.splitedMessage{
+	font-size:19px;
+	margin-left:3px
 }
 
 .comment-name{
@@ -198,13 +287,17 @@ body {
 .messagecomment{
 	boder-top :5px ridge;
 	border-bottom: 1px solid;
-    margin: 10px auto;
-    max-width: 750px;
+    margin:  auto;
+    max-width: 100%;
+    margin-right: 15%;
+    margin-left:15%;
 }
 
 
 .id-date{
 	float:right;
+	color: gray;
+	font-weight: lighter;
 
 }
 
@@ -263,24 +356,6 @@ a.profile .account {
 .mainMessage{
 	margin-top: 5px;
 }
-
-.message-icon {
-	border-bottom-style: ridge;
-	margin-top: 5px;
-	margin-right: 5px;
-	margin-bottom: 5px;
-	margin-left: 5px;
-	height: 80px;
-}
-
-.message-icon .icon {
-	margin-top: 1px;
-	margin-right: 1px;
-	margin-bottom: 1px;
-	margin-left: 1px;
-	float: left;
-}
-
 
 
 .account-name .name {

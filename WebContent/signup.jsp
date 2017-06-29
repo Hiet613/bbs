@@ -24,12 +24,12 @@
 		</script>
 	</head>
 	<body>
-	<div class="back">
+	<div class="back2">
 			<a href="usercontroll">戻る</a>
 			<a href="./">ホームへ</a>
 		</div>
 		<div class="main-contents2">
-			<h1>ユーザー新規登録画面</h1>
+			<h1 class="h2"  align="center" >ユーザー新規登録画面</h1>
 
 			<c:if test="${ not empty errorMessages }">
 				<div class="errorMessages">
